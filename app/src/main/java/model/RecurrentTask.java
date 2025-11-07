@@ -11,10 +11,11 @@ public class RecurrentTask extends Task{
     Calendar startCalendar;
     Calendar endCalendar;
     Calendar nextOccurence;
-    
-    public RecurrentTask(String id, String title, String description, Category category, Status status, String userId, Priority priority, LocalDateTime upCalendardAt, LocalDateTime createdAt) {
-        super(id, title, description, category, status, userId, priority, upCalendardAt, createdAt);
+
+    public RecurrentTask(String id, String title, String description, Category category, Status status, String userId, Priority priority, boolean enableNotif, LocalDateTime updatedAt, LocalDateTime createdAt) {
+        super(id, title, description, category, status, userId, priority, enableNotif, updatedAt, createdAt);
     }
+
 
     public Frequency getFreq() {
         return freq;

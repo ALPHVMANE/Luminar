@@ -4,6 +4,8 @@ For all classes make one structure if user doesnt fill one field, in controller 
 CRUD OPS => (encode + decode pfp)
 
 //--- FOR MEL ---//
-USER CLASS -> fields
+USER CLASS -> fields + func
+CHILDREN TASKS -> func
+USERTASKS CLASS -> get func (display info = list
 
 //---GENERAL INFORMATION---//

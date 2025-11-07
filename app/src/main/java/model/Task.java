@@ -13,7 +13,9 @@ public class Task {
     private LocalDateTime createdAt;
     private Priority priority;
 
-    public Task(String id, String title, String description, Category category, Status status, String userId, Priority priority, LocalDateTime updatedAt, LocalDateTime createdAt) {
+    private boolean enableNotif;
+
+    public Task(String id, String title, String description, Category category, Status status, String userId, Priority priority, boolean enableNotif, LocalDateTime updatedAt, LocalDateTime createdAt) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -95,5 +97,13 @@ public class Task {
 
     public void setPriority(Priority priority) {
         this.priority = priority;
+    }
+
+    public boolean isEnableNotif() {
+        return enableNotif;
+    }
+
+    public void setEnableNotif(boolean enableNotif) {
+        this.enableNotif = enableNotif;
     }
 }
