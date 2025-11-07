@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
 
     DatabaseReference luminarDatabase;
 
+    //Database References
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
