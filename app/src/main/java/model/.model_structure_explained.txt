@@ -1,1 +1,9 @@
-Frequency is the parent class
+
+//--- FOR JUSTIN ---//
+For all classes make one structure if user doesnt fill one field, in controller initialize variable to empty
+CRUD OPS => (encode + decode pfp)
+
+//--- FOR MEL ---//
+USER CLASS -> fields
+
+//---GENERAL INFORMATION---//

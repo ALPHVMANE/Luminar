@@ -3,38 +3,97 @@ package model;
 import java.time.*;
 
 public class Task {
-    private int id;
-    private LocalDate startDate; //yyyy-MM-dd
-    private int startTime; //hour
-    private String name;
+    private String id;
+    private String title;
     private String description;
-    private Frequency frequency;
     private Category category;
+    private Status status;
+    private String userId;
+    private LocalDateTime updatedAt;
+    private LocalDateTime createdAt;
+    private Priority priority;
 
-
-    public Task(int id, LocalDate startDate, String name, Frequency frequency) {
+    public Task(String id, String title, String description, Category category, Status status, String userId, Priority priority, LocalDateTime updatedAt, LocalDateTime createdAt) {
         this.id = id;
-        this.startDate = startDate;
-        this.name = name;
-        this.frequency = frequency;
-    }
-    public Task(int id, LocalDate startDate, String name, String description, Frequency frequency, Category category) {
-        this.id = id;
-        this.startDate = startDate;
-        this.name = name;
+        this.title = title;
         this.description = description;
-        this.frequency = frequency;
+        this.category = category;
+        this.status = status;
+        this.userId = userId;
+        this.priority = priority;
+        this.updatedAt = updatedAt;
+        this.createdAt = createdAt;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
         this.category = category;
     }
 
+    public Status getStatus() {
+        return status;
+    }
 
-    public Task(int id, LocalDate startDate, int startTime, String name, String description, Frequency frequency, Category category) {
-        this.id = id;
-        this.startDate = startDate;
-        this.startTime = startTime;
-        this.name = name;
-        this.description = description;
-        this.frequency = frequency;
-        this.category = category;
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String user) {
+        this.userId = user;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
     }
 }
