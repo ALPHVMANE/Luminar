@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "920005151733",
+    "project_id": "luminar-dff89",
+    "storage_bucket": "luminar-dff89.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:920005151733:android:6025f7091e5c0e5a26eebc",
+        "android_client_info": {
+          "package_name": "com.example.luminar"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8RcJNzx4o2nRyvwPeGXfw35RSxgfGldE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
