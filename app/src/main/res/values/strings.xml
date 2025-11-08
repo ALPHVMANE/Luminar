@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Luminar</string>
+    <string name="welcome_title">Welcome to Luminar</string>
+    <string name="welcome_desc">This application will help you to keep a good routine and build good habits!</string>
+    <string name="nav_prev">Previous</string>
+    <string name="nav_next">Next</string>
+    <string name="to_start_using_luminar_please_register_the_habit_you_would_like_to_work_on">To start using Luminar, please register the habit you would like to work on</string>
+    <string name="create_a_routine">Create a Routine</string>
+    <string name="from_now_on_you_will_find_a_list_with_all_the_tasks_to_follow_everyday_set_your_reminders_to_accomplish_them">From now on you will find a list with all the tasks to follow everyday. Set your reminders to accomplish them</string>
+    <string name="check_your_advance">Check your Advance</string>
+    <string name="create_success_streaks_for_your_habits_and_complete_all_your_tasks_use_the_charts_to_analyze_your_progress">Create success streaks for your habits and complete all your tasks. Use the charts to analyze your progress</string>
+    <string name="try_the_customization_options_create_a_daily_journal_and_protect_your_data">Try the customization options, create a daily journal, and protect your data</string>
+    <string name="customize_your_app">Customize your app</string>
+    <string name="register">Register</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="submit">Submit</string>
+    <string name="access">Access</string>
+    <string name="login">Login</string>
+    <string name="log_in">Log In</string>
+    <string name="Email">Email</string>
+    <string name="Password">Password</string>
+    <string name="Access">Access</string>
+    <string name="Continue">Continue</string>
+    <string name="let_s_build_good_habits_and_keep_good_routines">Let\'s build good habits and keep good routines!</string>
+    <string name="task_name">Task Name</string>
+    <string name="notes">Notes</string>
+    <string name="date">Date</string>
+    <string name="save_task">Save Task</string>
+    <string name="start_time">Start Time</string>
+    <string name="end_time">End Time</string>
+    <string name="goal_date">Goal Date</string>
+    <string name="pick_color">Pick color</string>
+    <string name="reminder">Reminder</string>
+    <string name="frequency">Frequency</string>
+</resources>

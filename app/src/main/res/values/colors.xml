@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="luminar_bg">#e0f2f6</color>         <!-- whole app background -->
+    <color name="luminar_text">#583DAD</color>       <!-- primary text -->
+    <color name="luminar_button">#FFA500</color>     <!-- buttons/toggles -->
+    <color name="luminar_alt1">#87dbfd</color>       <!-- extra accent -->
+    <color name="luminar_alt2">#d5ceeb</color>       <!-- extra accent -->
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+</resources>

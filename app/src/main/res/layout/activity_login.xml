@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="@color/luminar_bg"
+    android:padding="32dp">
+
+    <!-- Logo -->
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/logo_luminar"
+        android:contentDescription="@string/app_name"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Title -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/log_in"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/luminar_text"
+        android:layout_marginBottom="24dp" />
+
+    <!-- Email -->
+    <EditText
+        android:id="@+id/edtLoginEmail"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="@string/Email"
+        android:background="@drawable/rounded_box"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textColorHint="#A9A9A9"
+        android:textColor="@color/luminar_text"
+        android:inputType="textEmailAddress"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Password -->
+    <EditText
+        android:id="@+id/edtLoginPassword"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="@string/Password"
+        android:background="@drawable/rounded_box"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textColorHint="#A9A9A9"
+        android:textColor="@color/luminar_text"
+        android:inputType="textPassword"
+        android:layout_marginBottom="24dp" />
+
+    <!-- Access button -->
+    <Button
+        android:id="@+id/btnAccess"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/Access"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:backgroundTint="@color/luminar_button"
+        android:paddingVertical="10dp" />
+
+</LinearLayout>
