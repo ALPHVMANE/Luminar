@@ -1,10 +1,18 @@
 package model;
 
-import java.util.Calendar;
-import java.util.Calendar;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Calendar;
 import java.time.*;
-import java.time.LocalTime;
+import java.util.function.Consumer;
 
 public class RecurrentTask extends Task{
     Frequency freq;
@@ -49,7 +57,7 @@ public class RecurrentTask extends Task{
         this.nextOccurence = nextOccurence;
     }
     
-    //FUNCTIONS
+    //METHODS
     
     public Calendar calculateNextOccurence(){
         Calendar nextOccurence = this.nextOccurence;
@@ -68,5 +76,38 @@ public class RecurrentTask extends Task{
             nextOccurence.add(Calendar.YEAR,1);
         }
         return nextOccurence;
+    }
+
+    //delete
+    public void delete(String id) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("recurringTasks").child(Global.getUid()).child(id);
+        ref.removeValue()
+                .addOnSuccessListener(aVoid -> Log.d("Firebase", "Recurrent Task Successfully deleted"))
+                .addOnFailureListener(e -> Log.e("Firebase", "Unable to delete recurrent task :" + e.getMessage()));
+    }
+    //save
+    public void save(RecurrentTask task){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("recurringTasks");
+        ref.child(Global.getUid()).child(task.getId()).setValue(task)
+                .addOnSuccessListener(aVoid -> Log.d("Firebase", "Recurrent task was successfully saved to the database"))
+                .addOnFailureListener(e -> Log.e("Firebase", "Unable to save recurrent task : " + e.getMessage()));
+    }
+
+    //load
+    public void load(String id, Consumer<RecurrentTask> onResult){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("recurringTasks").child(Global.getUid()).child(id);
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                RecurrentTask task = snapshot.getValue(RecurrentTask.class);
+                onResult.accept(task);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                onResult.accept(null);
+            }
+        });
     }
 }

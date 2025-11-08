@@ -8,11 +8,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.firebase.database.DatabaseReference;
-
 public class MainActivity extends AppCompatActivity {
 
-    DatabaseReference luminarDatabase;
 
     //Database References
     @Override
