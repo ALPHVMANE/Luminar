@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="@color/luminar_bg"
+    android:padding="32dp">
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/logo_luminar"
+        android:contentDescription="@string/app_name"/>
+
+    <!-- Title -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/register"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:textColor="@color/luminar_text"
+        android:layout_marginBottom="32dp" />
+
+    <!-- Name -->
+    <EditText
+        android:id="@+id/edtName"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="@string/name"
+        android:background="@drawable/rounded_box"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textColorHint="#A9A9A9"
+        android:textColor="@color/luminar_text"
+        android:inputType="textPersonName"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Email -->
+    <EditText
+        android:id="@+id/edtEmail"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="@string/email"
+        android:background="@drawable/rounded_box"
+        android:paddingHorizontal="16dp"
+        android:textColorHint="#A9A9A9"
+        android:textColor="@color/luminar_text"
+        android:inputType="textEmailAddress"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Password -->
+    <EditText
+        android:id="@+id/edtPassword"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="@string/password"
+        android:background="@drawable/rounded_box"
+        android:paddingHorizontal="16dp"
+        android:textColorHint="#A9A9A9"
+        android:textColor="@color/luminar_text"
+        android:inputType="textPassword"
+        android:layout_marginBottom="24dp" />
+
+    <!-- Submit Button -->
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/submit"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        android:background="@drawable/rounded_box"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/luminar_button"
+        android:paddingVertical="10dp" />
+
+</LinearLayout>

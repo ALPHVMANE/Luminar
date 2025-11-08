@@ -106,4 +106,5 @@ public class Task {
     public void setEnableNotif(boolean enableNotif) {
         this.enableNotif = enableNotif;
     }
+
 }
