@@ -1,0 +1,11 @@
+
+//--- FOR JUSTIN ---//
+For all classes make one structure if user doesnt fill one field, in controller initialize variable to empty
+CRUD OPS => (encode + decode pfp)
+
+//--- FOR MEL ---//
+USER CLASS -> fields + func
+CHILDREN TASKS -> func
+USERTASKS CLASS -> get func (display info = list
+
+//---GENERAL INFORMATION---//
