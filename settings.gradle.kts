@@ -19,5 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "PrjLuminar"
+rootProject.name = "Luminar"
 include(":app")
+ 
