@@ -10,9 +10,14 @@
 
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="181dp"
+        android:layout_height="196dp"
         android:contentDescription="@string/app_name"
         android:src="@drawable/logo_luminar" />
+
+    <CalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

@@ -10,8 +10,8 @@
 
     <!-- Logo -->
     <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
         android:src="@drawable/logo_luminar"
         android:contentDescription="@string/app_name"
         android:layout_marginBottom="16dp" />
@@ -31,6 +31,7 @@
         android:id="@+id/edtLoginEmail"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:autofillHints=""
         android:hint="@string/Email"
         android:background="@drawable/rounded_box"
         android:paddingStart="16dp"
@@ -45,6 +46,7 @@
         android:id="@+id/edtLoginPassword"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:autofillHints=""
         android:hint="@string/Password"
         android:background="@drawable/rounded_box"
         android:paddingStart="16dp"
@@ -63,7 +65,7 @@
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="18sp"
-        android:backgroundTint="@color/luminar_button"
+        android:background="@drawable/rounded_box"
         android:paddingVertical="10dp" />
 
 </LinearLayout>

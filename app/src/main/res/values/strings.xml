@@ -34,4 +34,5 @@
     <string name="pick_color">Pick color</string>
     <string name="reminder">Reminder</string>
     <string name="frequency">Frequency</string>
+    <string name="add_task">Add Task</string>
 </resources>

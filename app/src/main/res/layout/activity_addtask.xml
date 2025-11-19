@@ -1,36 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center_horizontal"
     android:background="@color/luminar_bg"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
     android:padding="32dp">
 
     <!-- Title -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Task"
-        android:textSize="26sp"
-        android:textStyle="bold"
+        android:layout_marginBottom="32dp"
+        android:text="@string/add_task"
         android:textColor="@color/luminar_text"
-        android:layout_marginBottom="32dp" />
+        android:textSize="26sp"
+        android:textStyle="bold" />
 
     <!-- Name -->
     <EditText
         android:id="@+id/edtName"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:hint="@string/task_name"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/rounded_box"
+        android:hint="@string/task_name"
+        android:inputType="textPersonName"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:textColorHint="#A9A9A9"
         android:textColor="@color/luminar_text"
-        android:inputType="textPersonName"
-        android:layout_marginBottom="16dp" />
+        android:textColorHint="#A9A9A9" />
 
     <!-- Notes -->
     <EditText
@@ -39,8 +38,9 @@
         android:layout_height="78dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/rounded_box"
+        android:baselineAligned="false"
         android:hint="@string/notes"
-        android:inputType="textTaskNotes"
+        android:inputType="textMultiLine"
         android:paddingHorizontal="16dp"
         android:textColor="@color/luminar_text"
         android:textColorHint="#A9A9A9" />
@@ -49,14 +49,14 @@
         android:id="@+id/edtGoalDate"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:hint="@string/goal_date"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/rounded_box"
+        android:hint="@string/goal_date"
+        android:inputType="date"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:textColorHint="#A9A9A9"
         android:textColor="@color/luminar_text"
-        android:inputType="textGoalDate"
-        android:layout_marginBottom="16dp" />
+        android:textColorHint="#A9A9A9" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -76,7 +76,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/rounded_box"
                 android:hint="@string/start_time"
-                android:inputType="textStartTime"
+                android:inputType="time"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:textColor="@color/luminar_text"
@@ -90,7 +90,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/rounded_box"
                 android:hint="@string/end_time"
-                android:inputType="textEndTime"
+                android:inputType="time"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:textColor="@color/luminar_text"
@@ -102,40 +102,40 @@
         android:id="@+id/edtFrequency"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:hint="@string/frequency"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/rounded_box"
+        android:hint="@string/frequency"
+        android:inputType="text"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:textColorHint="#A9A9A9"
         android:textColor="@color/luminar_text"
-        android:inputType="textFrequency"
-        android:layout_marginBottom="16dp" />
+        android:textColorHint="#A9A9A9" />
 
     <EditText
         android:id="@+id/edtReminder"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:hint="@string/reminder"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/rounded_box"
+        android:hint="@string/reminder"
+        android:inputType="text"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:textColorHint="#A9A9A9"
         android:textColor="@color/luminar_text"
-        android:inputType="textReminder"
-        android:layout_marginBottom="16dp" />
+        android:textColorHint="#A9A9A9" />
 
     <EditText
         android:id="@+id/edtPickColor"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:hint="@string/pick_color"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/rounded_box"
+        android:hint="@string/pick_color"
+        android:inputType="text"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:textColorHint="#A9A9A9"
         android:textColor="@color/luminar_text"
-        android:inputType="textPickColor"
-        android:layout_marginBottom="16dp" />
+        android:textColorHint="#A9A9A9" />
 
     <!-- Submit Button -->
     <Button
