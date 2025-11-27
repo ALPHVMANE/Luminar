@@ -1,4 +1,4 @@
-package com.example.prjluminar;
+package com.example.luminar;
 
 import android.content.Intent;
 import android.os.Bundle;
