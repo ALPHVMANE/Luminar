@@ -12,7 +12,6 @@ public class Task {
     private LocalDateTime updatedAt;
     private LocalDateTime createdAt;
     private Priority priority;
-
     private boolean enableNotif;
 
     public Task(String id, String title, String description, Category category, Status status, String userId, Priority priority, boolean enableNotif, LocalDateTime updatedAt, LocalDateTime createdAt) {
@@ -46,7 +45,6 @@ public class Task {
     public String getDescription() {
         return description;
     }
-
     public void setDescription(String description) {
         this.description = description;
     }

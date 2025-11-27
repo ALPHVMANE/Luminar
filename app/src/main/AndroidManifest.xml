@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Luminar">
         <activity
+            android:name=".CalendarActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

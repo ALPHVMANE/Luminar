@@ -101,7 +101,7 @@ public class User{
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
 
         ref.child(uid).removeValue()
-                .addOnSuccessListener(aVoid -> Log.d("Firebase", "User deleted succesfully"))
+                .addOnSuccessListener(aVoid -> Log.d("Firebase", "User deleted successfully"))
                 .addOnFailureListener(e -> Log.e("Firebase", "Failed to delete user: " + e.getMessage()));
     }
 
@@ -125,14 +125,14 @@ public class User{
                 onResult.accept(user);
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                onResult.accept(null);
-            }
-        });
-    }
-
-    // then load the user like this :
+    //            @Override
+    //            public void onCancelled(@NonNull DatabaseError error) {
+    //                onResult.accept(null);
+    //            }
+    //        });
+    //    }
+    //
+    //    // then load the user like this :
 
     //loadUserByUid(Global.getUid(), user -> {
     //    if (user != null) {

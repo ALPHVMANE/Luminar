@@ -1,4 +1,4 @@
-package com.example.prjluminar;
+package com.example.luminar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,9 +10,9 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
-        Button next = findViewById(R.id.btnNextWelcome);
-        next.setOnClickListener(v ->
-                startActivity(new Intent(WelcomeActivity.this, RoutineActivity.class))
-        );
+//        Button next = findViewById(R.id.btnNextWelcome);
+//        next.setOnClickListener(v ->
+//                startActivity(new Intent(WelcomeActivity.this, RoutineActivity.class))
+//        );
     }
 }
