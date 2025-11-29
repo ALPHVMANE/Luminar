@@ -29,9 +29,7 @@ public class RecurrentTask extends Task{
     }
 
 
-    public Frequency getFreq() {
-        return freq;
-    }
+    public Frequency getFreq() {return freq;}
 
     public void setFreq(Frequency freq) {
         this.freq = freq;
