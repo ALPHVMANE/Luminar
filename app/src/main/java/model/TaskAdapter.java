@@ -1,12 +1,16 @@
 package model;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
 
 import com.example.luminar.R;
 import com.google.android.material.snackbar.Snackbar;
@@ -53,8 +57,8 @@ public class TaskAdapter extends BaseAdapter {
         // We return a view that represent the task
 
         View oneItem;
-        ImageView imPhoto, imMore;
-        TextView tvFullName, tvTeamName;
+        ImageView imColor;
+        TextView tvTitle, tvStat, tvCat;
 
         // These widgets are stored/located in one_item.xml
         // ==> We need to do an operation that consist to convert this xml file (one_item.xml) to a java view object
@@ -64,31 +68,23 @@ public class TaskAdapter extends BaseAdapter {
         LayoutInflater inflater = LayoutInflater.from(context);
         oneItem = inflater.inflate(R.layout.task_item,parent,false);
 
-        // 3 - Reference each widget in view (one_item.xml)
+        // 3 - Reference each widget in single view
         tvTitle = oneItem.findViewById(R.id.tvTitle);
         tvStat = oneItem.findViewById(R.id.tvStatus);
         tvCat = oneItem.findViewById(R.id.tvCategory);
-
-        imMore = oneItem.findViewById(R.id.imMore);
-        imMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                task = (task)getItem(position);
-                Snackbar.make(v,"Year of birth is "+task.getYearOfBirth(),
-                        Snackbar.LENGTH_LONG).show();
-            }
-        });
+        imColor = oneItem.findViewById(R.id.colorCategory);
 
         // 4 - Manipulate (Populate) the widgets
-        task = (task)getItem(position);
-        tvFullName.setText(task.getFullName());
-        tvTeamName.setText(task.getTeamName());
-        String photoStr = task.getPhoto();
-        int photoResId = context
-                .getResources()
-                .getIdentifier("drawable/"+photoStr,null,context.getPackageName());
+        task = (Task)getItem(position);
+        tvTitle.setText(task.getTitle());
+        tvStat.setText(task.getStatus().name());
+        String colorString = task.getCategory().getHex();
 
-        imPhoto.setImageResource(photoResId);
+
+        //get drawable from image button
+        GradientDrawable drawable = (GradientDrawable) imColor.getDrawable();
+        int color = Color.parseColor("#" + colorString);
+        drawable.setColor(color);
 
         // 5 - Return the view oneItem
         return oneItem;

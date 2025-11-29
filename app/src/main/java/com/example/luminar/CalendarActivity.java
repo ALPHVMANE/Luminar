@@ -44,9 +44,6 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
         lvTasks.setOnItemClickListener(this);
         taskAdapter = new TaskAdapter(this,taskList);
         lvTasks.setAdapter(taskAdapter);
-//        colorCategory.setColorFilter(ContextCompat.getColor(context, R.color.));
-//        int color = Color.parseColor("#" + Category.getHex());
-//        has.setColorFilter(color);
 
         calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
