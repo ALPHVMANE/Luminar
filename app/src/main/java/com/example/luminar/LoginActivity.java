@@ -2,35 +2,92 @@ package com.example.luminar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
-public class LoginActivity extends AppCompatActivity {
+import com.google.firebase.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Calendar;
+
+import model.Global;
+import model.User;
+
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+    EditText edEmail, edPassword;
+    Button btnLogin;
+    private final User user = new User();
+    private FirebaseAuth mAuth;
+
+    //Database References
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mAuth = FirebaseAuth.getInstance();
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
-
-        EditText edtLoginEmail = findViewById(R.id.edtLoginEmail);
-        EditText edtLoginPassword = findViewById(R.id.edtLoginPassword);
-        Button btnAccess = findViewById(R.id.btnAccess);
-
-        btnAccess.setOnClickListener(v -> {
-            String email = edtLoginEmail.getText().toString().trim();
-            String password = edtLoginPassword.getText().toString().trim();
-
-            if (email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Email and password are required", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            // ✅ Simulate login success and go to Welcome
-            Intent i = new Intent(LoginActivity.this, WelcomeActivity.class);
-            startActivity(i);
-            finish(); // optional: prevents going back to Login
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
         });
+        initialize();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // If Firebase Auth session exists, skip login
+        if (mAuth.getCurrentUser() != null) {
+            Global.setUid(mAuth.getCurrentUser().getUid());
+            goToMain();
+        }
+    }
+
+    private void goToMain() {
+        startActivity(new Intent(LoginActivity.this, CalendarActivity.class));
+        finish();
+    }
+
+    private void initialize() {
+        edEmail = findViewById(R.id.edtLoginEmail);
+        edPassword = findViewById(R.id.edtLoginPassword);
+        btnLogin = findViewById(R.id.btnLogin);
+
+        btnLogin.setOnClickListener(this);
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.btnLogin){
+            String email = edEmail.getText().toString().trim();
+            String password = edPassword.getText().toString().trim();
+            loginUser(email, password);
+        }
+    }
+
+    private void loginUser(String email, String password) {
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        user.login(this, email);
+                        goToMain();
+                    }
+                    else{
+                        Toast.makeText(LoginActivity.this,
+                                "Login failed: " + task.getException().getMessage(),
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 }

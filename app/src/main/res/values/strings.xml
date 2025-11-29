@@ -12,7 +12,7 @@
     <string name="try_the_customization_options_create_a_daily_journal_and_protect_your_data">Try the customization options, create a daily journal, and protect your data</string>
     <string name="customize_your_app">Customize your app</string>
     <string name="register">Register</string>
-    <string name="name">Name</string>
+    <string name="name">Username</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="submit">Submit</string>
@@ -21,7 +21,6 @@
     <string name="log_in">Log In</string>
     <string name="Email">Email</string>
     <string name="Password">Password</string>
-    <string name="Access">Access</string>
     <string name="Continue">Continue</string>
     <string name="let_s_build_good_habits_and_keep_good_routines">Let\'s build good habits and keep good routines!</string>
     <string name="task_name">Task Name</string>

@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    android:background="@color/luminar_bg"
+    android:id="@+id/main"
+    android:background="@color/white"
     android:padding="32dp">
 
     <!-- Title -->
@@ -15,7 +16,6 @@
         android:text="Add Task"
         android:textSize="26sp"
         android:textStyle="bold"
-        android:textColor="@color/luminar_text"
         android:layout_marginBottom="32dp" />
 
     <!-- Name -->
@@ -28,8 +28,7 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:textColorHint="#A9A9A9"
-        android:textColor="@color/luminar_text"
-        android:inputType="textPersonName"
+        android:inputType="text"
         android:layout_marginBottom="16dp" />
 
     <!-- Notes -->
@@ -40,10 +39,48 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/rounded_box"
         android:hint="@string/notes"
-        android:inputType="textTaskNotes"
+        android:inputType="textMultiLine"
         android:paddingHorizontal="16dp"
-        android:textColor="@color/luminar_text"
         android:textColorHint="#A9A9A9" />
+
+
+
+    <Spinner
+        android:id="@+id/spnCategory"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/rounded_box"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textColorHint="#A9A9A9"
+        android:layout_marginBottom="16dp" />
+
+<!--    <Spinner-->
+<!--        android:id="@+id/spnPriority"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:background="@drawable/rounded_box"-->
+<!--        android:paddingStart="16dp"-->
+<!--        android:paddingEnd="16dp"-->
+<!--        android:textColorHint="#A9A9A9"-->
+<!--        android:layout_marginBottom="16dp" />-->
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Recurrent Task ?" />
+
+    <CheckBox
+        android:id="@+id/chkNotifications"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="Enable Reminders" />
+</LinearLayout>
 
     <EditText
         android:id="@+id/edtGoalDate"
@@ -54,97 +91,63 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:textColorHint="#A9A9A9"
-        android:textColor="@color/luminar_text"
-        android:inputType="textGoalDate"
+        android:inputType="date"
         android:layout_marginBottom="16dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="59dp"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/edtStartTime"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginBottom="16dp"
-                android:layout_weight="1"
-                android:background="@drawable/rounded_box"
-                android:hint="@string/start_time"
-                android:inputType="textStartTime"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:textColor="@color/luminar_text"
-                android:textColorHint="#A9A9A9" />
-
-            <EditText
-                android:id="@+id/edtEndTime"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginBottom="16dp"
-                android:layout_weight="1"
-                android:background="@drawable/rounded_box"
-                android:hint="@string/end_time"
-                android:inputType="textEndTime"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:textColor="@color/luminar_text"
-                android:textColorHint="#A9A9A9" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <EditText
-        android:id="@+id/edtFrequency"
+    <Spinner
+        android:id="@+id/spnFrequency"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:hint="@string/frequency"
         android:background="@drawable/rounded_box"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:textColorHint="#A9A9A9"
-        android:textColor="@color/luminar_text"
-        android:inputType="textFrequency"
         android:layout_marginBottom="16dp" />
 
-    <EditText
-        android:id="@+id/edtReminder"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:hint="@string/reminder"
-        android:background="@drawable/rounded_box"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:textColorHint="#A9A9A9"
-        android:textColor="@color/luminar_text"
-        android:inputType="textReminder"
-        android:layout_marginBottom="16dp" />
-
-    <EditText
-        android:id="@+id/edtPickColor"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:hint="@string/pick_color"
-        android:background="@drawable/rounded_box"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:textColorHint="#A9A9A9"
-        android:textColor="@color/luminar_text"
-        android:inputType="textPickColor"
-        android:layout_marginBottom="16dp" />
 
     <!-- Submit Button -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edtStartTime"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+
+            android:layout_weight="1"
+            android:background="@drawable/rounded_box"
+            android:hint="@string/start_time"
+            android:inputType="time"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textColorHint="#A9A9A9" />
+
+        <EditText
+            android:id="@+id/edtEndTime"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_box"
+            android:hint="@string/end_time"
+            android:inputType="time"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textColorHint="#A9A9A9" />
+    </LinearLayout>
+
+
+
     <Button
         android:id="@+id/btnSubmit"
         android:layout_width="153dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="12dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="bottom"
         android:background="@drawable/rounded_box"
-        android:backgroundTint="@color/luminar_button"
+        android:layout_marginTop="40dp"
         android:paddingVertical="10dp"
         android:text="@string/save_task"
         android:textAllCaps="false"

@@ -2,7 +2,7 @@ package model;
 
 import java.time.*;
 
-public class Task {
+public abstract class Task {
     private String id;
     private String title;
     private String description;
@@ -104,5 +104,6 @@ public class Task {
     public void setEnableNotif(boolean enableNotif) {
         this.enableNotif = enableNotif;
     }
-
+    //method
+    public abstract void delete(String taskId);
 }

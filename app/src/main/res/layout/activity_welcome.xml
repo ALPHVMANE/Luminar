@@ -3,8 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/luminar_bg"
-    android:gravity="center_horizontal">
+    android:id="@+id/main"
+    android:gravity="center_horizontal"
+    android:background="@color/white">
 
     <!-- Center content takes available space -->
     <LinearLayout
@@ -26,7 +27,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/welcome_title"
-            android:textColor="@color/luminar_text"
             android:textSize="34sp"
             android:textStyle="bold"
             android:layout_marginBottom="8dp" />
@@ -35,7 +35,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/let_s_build_good_habits_and_keep_good_routines"
-            android:textColor="@color/luminar_text"
             android:textSize="24sp"
             android:gravity="center"
             android:layout_marginHorizontal="24dp" />
