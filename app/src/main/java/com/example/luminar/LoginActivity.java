@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -24,6 +25,8 @@ import model.User;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     EditText edEmail, edPassword;
     Button btnLogin;
+    TextView tvRegister;
+
     private final User user = new User();
     private FirebaseAuth mAuth;
 
@@ -62,7 +65,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         edEmail = findViewById(R.id.edtLoginEmail);
         edPassword = findViewById(R.id.edtLoginPassword);
         btnLogin = findViewById(R.id.btnLogin);
-
+        tvRegister= findViewById(R.id.tvRegister_Login);
+        tvRegister.setOnClickListener(this);
         btnLogin.setOnClickListener(this);
     }
 
@@ -73,6 +77,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             String email = edEmail.getText().toString().trim();
             String password = edPassword.getText().toString().trim();
             loginUser(email, password);
+        }
+        if(v.getId() == R.id.tvRegister_Login){
+            startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+            finish();
         }
     }
 
