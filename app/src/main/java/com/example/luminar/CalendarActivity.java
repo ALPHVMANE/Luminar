@@ -1,11 +1,13 @@
 package com.example.luminar;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -17,10 +19,10 @@ import model.*;
 public class CalendarActivity extends AppCompatActivity implements AdapterView.OnItemClickListener  {
     CalendarView calendar;
     TextView calendarDate;
-
     ListView lvTasks;
-    ArrayList<Task> taskList;
 
+    ImageView colorCategory;
+    ArrayList<Task> taskList;
     TaskAdapter taskAdapter;
 
     @Override
@@ -38,25 +40,21 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
     private void initialize() {
         calendar = findViewById(R.id.calendarView);
         calendarDate = findViewById(R.id.calendarDate);
+        lvTasks = findViewById(R.id.listTasks);
+        lvTasks.setOnItemClickListener(this);
+        taskAdapter = new TaskAdapter(this,taskList);
+        lvTasks.setAdapter(taskAdapter);
+//        colorCategory.setColorFilter(ContextCompat.getColor(context, R.color.));
+//        int color = Color.parseColor("#" + Category.getHex());
+//        has.setColorFilter(color);
 
         calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 String date = dayOfMonth + "/" + (month + 1) + "/" + year;
                 calendarDate.setText(date);
-                DisplayTasks();
             }
         });
-    }
-
-    private void DisplayTasks() {
-
-    }
-
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-        super.onPointerCaptureChanged(hasCapture);
     }
 
     @Override
