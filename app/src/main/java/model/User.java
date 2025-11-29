@@ -25,6 +25,7 @@ public class User{
 //    private Role role; (admin feature) TBD
 
     //constructors
+    //Constructor to load users
     public User(String id, String name, String email, boolean enableNotif) {
         this.id = id;
         this.name = name;
@@ -35,6 +36,14 @@ public class User{
     public User(){
 
     }
+
+    //Constructor to create user
+    public User(String username, String email, boolean b) {
+        this.name = name;
+        this.email = email;
+        this.enableNotif = b;
+    }
+
     public String getId() {
         return id;
     }
@@ -134,7 +143,7 @@ public class User{
 
     // then load the user like this :
 
-    //loadUserByUid(Global.getUid(), user -> {
+    //loadUser(Global.getUid(), user -> {
     //    if (user != null) {
     //        Log.d("Firebase", "Loaded user: " + user.getName());
     //    } else {

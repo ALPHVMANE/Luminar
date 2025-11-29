@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    android:background="@color/luminar_bg"
+    android:background="@color/white"
+    android:id="@+id/main"
     android:padding="32dp">
 
     <!-- Logo -->
@@ -23,7 +24,6 @@
         android:text="@string/log_in"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:textColor="@color/luminar_text"
         android:layout_marginBottom="24dp" />
 
     <!-- Email -->
@@ -36,7 +36,6 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:textColorHint="#A9A9A9"
-        android:textColor="@color/luminar_text"
         android:inputType="textEmailAddress"
         android:layout_marginBottom="16dp" />
 
@@ -50,20 +49,18 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:textColorHint="#A9A9A9"
-        android:textColor="@color/luminar_text"
         android:inputType="textPassword"
         android:layout_marginBottom="24dp" />
 
     <!-- Access button -->
     <Button
-        android:id="@+id/btnAccess"
+        android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/Access"
+        android:text="@string/login"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="18sp"
-        android:backgroundTint="@color/luminar_button"
         android:paddingVertical="10dp" />
 
 </LinearLayout>

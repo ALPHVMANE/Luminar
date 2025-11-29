@@ -17,8 +17,9 @@ import java.util.function.Consumer;
 public class NonRecurrentTask extends Task {
     private Calendar dueDate;
 
-    public NonRecurrentTask(String id, String title, String description, Category category, Status status, String userId, Priority priority, boolean enableNotif, LocalDateTime updatedAt, LocalDateTime createdAt) {
+    public NonRecurrentTask(String id, String title, String description, Category category, Status status, String userId, Priority priority, boolean enableNotif, LocalDateTime updatedAt, LocalDateTime createdAt, Calendar dueDate) {
         super(id, title, description, category, status, userId, priority, enableNotif, updatedAt, createdAt);
+        this.dueDate = dueDate;
     }
 
     public Calendar getDueDate() {
@@ -32,7 +33,7 @@ public class NonRecurrentTask extends Task {
     //methods
 
     //delete
-
+    @Override
     public void delete(String id) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("tasks").child(Global.getUid()).child(id);
         ref.removeValue()
@@ -40,6 +41,7 @@ public class NonRecurrentTask extends Task {
                 .addOnFailureListener(e -> Log.e("Firebase", "Unable to delete non recurrent task :" + e.getMessage()));
     }
 
+    //save
     public void save(NonRecurrentTask task){
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("tasks");
         ref.child(Global.getUid()).child(task.getId()).setValue(task)
@@ -47,6 +49,7 @@ public class NonRecurrentTask extends Task {
                 .addOnFailureListener(e -> Log.e("Firebase", "Unable to save non recurrent task : " + e.getMessage()));
     }
 
+    //load
     public void load(String id, Consumer<NonRecurrentTask> onResult){
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("tasks").child(Global.getUid()).child(id);
 

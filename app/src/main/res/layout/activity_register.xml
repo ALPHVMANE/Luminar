@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    android:background="@color/luminar_bg"
+    android:background="@color/white"
+    android:id="@+id/main"
     android:padding="32dp">
 
     <ImageView
@@ -22,7 +23,7 @@
         android:text="@string/register"
         android:textSize="26sp"
         android:textStyle="bold"
-        android:textColor="@color/luminar_text"
+
         android:layout_marginBottom="32dp" />
 
     <!-- Name -->
@@ -35,7 +36,7 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:textColorHint="#A9A9A9"
-        android:textColor="@color/luminar_text"
+
         android:inputType="textPersonName"
         android:layout_marginBottom="16dp" />
 
@@ -48,7 +49,7 @@
         android:background="@drawable/rounded_box"
         android:paddingHorizontal="16dp"
         android:textColorHint="#A9A9A9"
-        android:textColor="@color/luminar_text"
+
         android:inputType="textEmailAddress"
         android:layout_marginBottom="16dp" />
 
@@ -61,21 +62,21 @@
         android:background="@drawable/rounded_box"
         android:paddingHorizontal="16dp"
         android:textColorHint="#A9A9A9"
-        android:textColor="@color/luminar_text"
+
         android:inputType="textPassword"
         android:layout_marginBottom="24dp" />
 
     <!-- Submit Button -->
     <Button
-        android:id="@+id/btnSubmit"
+        android:id="@+id/btnRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/submit"
+        android:text="@string/register"
         android:textAllCaps="false"
         android:textSize="18sp"
         android:background="@drawable/rounded_box"
         android:textColor="@color/white"
-        android:backgroundTint="@color/luminar_button"
+
         android:paddingVertical="10dp" />
 
 </LinearLayout>
