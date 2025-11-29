@@ -4,8 +4,8 @@ For all classes make one structure if user doesnt fill one field, in controller 
 CRUD OPS => (encode + decode pfp)
 
 //--- FOR MEL ---//
-USER CLASS -> fields + func
-CHILDREN TASKS -> func
-USERTASKS CLASS -> get func (display info = list
+Color change reference: https://stackoverflow.com/questions/1309629/how-to-change-colors-of-a-drawable-in-android and https://stackoverflow.com/questions/1309629/how-to-change-colors-of-a-drawable-in-android
+calendar view: https://www.geeksforgeeks.org/android/android-creating-a-calendar-view-app/
+
 
 //---GENERAL INFORMATION---//
