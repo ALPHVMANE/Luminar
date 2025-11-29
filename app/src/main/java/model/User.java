@@ -125,13 +125,12 @@ public class User{
                 onResult.accept(user);
             }
 
-    //            @Override
-    //            public void onCancelled(@NonNull DatabaseError error) {
-    //                onResult.accept(null);
-    //            }
-    //        });
-    //    }
-    //
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    onResult.accept(null);
+                }
+            });
+        }
     //    // then load the user like this :
 
     //loadUserByUid(Global.getUid(), user -> {
