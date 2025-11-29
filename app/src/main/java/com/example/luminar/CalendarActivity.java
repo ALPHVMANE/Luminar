@@ -42,15 +42,22 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
         calendarDate = findViewById(R.id.calendarDate);
         lvTasks = findViewById(R.id.listTasks);
         lvTasks.setOnItemClickListener(this);
-        taskAdapter = new TaskAdapter(this,taskList);
+
+        // Initialize task list
+        taskList = new ArrayList<>();
+        taskAdapter = new TaskAdapter(this, taskList);
         lvTasks.setAdapter(taskAdapter);
 
-        calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                String date = dayOfMonth + "/" + (month + 1) + "/" + year;
-                calendarDate.setText(date);
-            }
+        // Example: add some dummy tasks
+
+        taskAdapter.notifyDataSetChanged();
+
+        // Listen to calendar changes
+        calendar.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
+            String date = dayOfMonth + "/" + (month + 1) + "/" + year;
+            calendarDate.setText(date);
+
+            // Optional: filter tasks for this date
         });
     }
 
