@@ -14,7 +14,7 @@ import model.NonRecurrentTask;
 import model.RecurrentTask;
 
 public class BottomSheetActivity extends AppCompatActivity {
-    TextView txtTitle, txtDescription, txtCategory, txtStatus, txtPriority, txtDueDate, txtFreq, txtStart, txtNext;
+    TextView txtTitle, txtDescription, txtCategory, txtStatus, txtDueDate, txtFreq, txtStart, txtNext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,7 @@ public class BottomSheetActivity extends AppCompatActivity {
         txtDescription = findViewById(R.id.txtDesc);
         txtCategory = findViewById(R.id.txtCat);
         txtStatus = findViewById(R.id.txtStat);
-        txtPriority = findViewById(R.id.txtPrio);
+//        txtPriority = findViewById(R.id.txtPrio);
 
         txtDueDate = findViewById(R.id.txtDueDate);
 
@@ -61,7 +61,7 @@ public class BottomSheetActivity extends AppCompatActivity {
                 txtDescription.setText(task.getDescription());
                 txtCategory.setText(task.getCategory().toString());
                 txtStatus.setText(task.getStatus().toString());
-                txtPriority.setText(task.getPriority().toString());
+//                txtPriority.setText(task.getPriority().toString());
 
                 txtFreq.setText(task.getFreq().toString());
                 txtStart.setText(task.getStartCalendar().toString());
@@ -83,7 +83,7 @@ public class BottomSheetActivity extends AppCompatActivity {
                 txtDescription.setText(task.getDescription());
                 txtCategory.setText(task.getCategory().toString());
                 txtStatus.setText(task.getStatus().toString());
-                txtPriority.setText(task.getPriority().toString());
+//                txtPriority.setText(task.getPriority().toString());
 
                 txtDueDate.setText(task.getDueDate().toString());
             });

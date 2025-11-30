@@ -53,16 +53,6 @@
             android:layout_height="350dp"
             app:layout_constraintHeight_percent="0.5">
 
-            <Button
-                android:id="@+id/btnAddTask"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="bottom"
-                android:layout_marginStart="330dp"
-                android:background="@drawable/circle_btn"
-                android:text="+"
-                android:textSize="23sp"></Button>
-
             <ListView
                 android:id="@+id/listTasks"
                 android:layout_width="match_parent"
