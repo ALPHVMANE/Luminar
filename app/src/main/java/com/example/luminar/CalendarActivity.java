@@ -1,7 +1,13 @@
 package com.example.luminar;
 
+import android.app.AlarmManager;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
 
@@ -15,6 +21,7 @@ import androidx.core.view.WindowInsetsCompat;
 import java.util.ArrayList;
 
 import model.*;
+import services.NotificationScheduler;
 
 public class CalendarActivity extends AppCompatActivity implements AdapterView.OnItemClickListener  {
     CalendarView calendar;
