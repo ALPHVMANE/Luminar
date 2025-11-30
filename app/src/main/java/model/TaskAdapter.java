@@ -81,7 +81,7 @@ public class TaskAdapter extends BaseAdapter {
         String colorString = task.getCategory().getHex();
 
 
-        //get drawable from image button
+        //get category color
         GradientDrawable drawable = (GradientDrawable) imColor.getDrawable();
         int color = Color.parseColor("#" + colorString);
         drawable.setColor(color);

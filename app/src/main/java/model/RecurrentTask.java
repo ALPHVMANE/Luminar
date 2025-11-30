@@ -97,7 +97,7 @@ public class RecurrentTask extends Task{
     }
 
     //load
-    public void load(String id, Consumer<RecurrentTask> onResult){
+    public static void load(String id, Consumer<RecurrentTask> onResult){
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("recurringTasks").child(Global.getUid()).child(id);
 
         ref.addListenerForSingleValueEvent(new ValueEventListener() {

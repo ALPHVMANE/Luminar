@@ -78,7 +78,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
 
-
                         if (mAuth.getCurrentUser() == null) {
                             Toast.makeText(this, "Unexpected error: User is null", Toast.LENGTH_SHORT).show();
                             return;
