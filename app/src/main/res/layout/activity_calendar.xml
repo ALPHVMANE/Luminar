@@ -5,9 +5,10 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    tools:context=".MainActivity">
+
 
     <!-- Calendar -->
     <LinearLayout
@@ -25,18 +26,18 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_gravity="center"
         android:layout_weight="0.1"
-        android:orientation="horizontal"
         android:gravity="center"
-        android:layout_gravity="center">
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/calendarDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:textSize="20sp"
-            android:text="DD/MM/YYYY" />
+            android:text="DD/MM/YYYY"
+            android:textSize="20sp" />
 
     </LinearLayout>
 
@@ -46,6 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="350dp"
@@ -59,15 +61,19 @@
                 android:layout_marginStart="330dp"
                 android:background="@drawable/circle_btn"
                 android:text="+"
-                android:textSize="23sp">
-            </Button>
+                android:textSize="23sp"></Button>
 
             <ListView
                 android:id="@+id/listTasks"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
 
         </FrameLayout>
     </LinearLayout>
 
+    <include
+        android:id="@+id/bottom_navigation"
+        layout="@layout/bottom_navigation_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>

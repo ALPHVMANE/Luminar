@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+
     <application
         android:name="model.Global"
         android:allowBackup="true"
@@ -11,7 +16,15 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/logo_luminar"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Luminar">
+        android:theme ="@style/Theme.Luminar" >
+        <activity
+            android:name=".NotificationActivity"
+            android:launchMode="singleTop"
+            android:exported="false" />
+        <activity
+            android:name=".AddTaskActivity"
+            android:launchMode="singleTop"
+            android:exported="false" />
         <activity
             android:name=".BottomSheetActivity"
             android:exported="false" />
@@ -20,17 +33,29 @@
             android:exported="false" />
         <activity
             android:name=".CalendarActivity"
+            android:launchMode="singleTop"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
     </application>
+        <service
+            android:name="services.FCM"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
+        <receiver
+            android:name="services.TaskReminderReceiver"
+            android:enabled="true"
+            android:exported="false"></receiver>
+    </application>
 </manifest>

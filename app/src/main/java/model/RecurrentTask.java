@@ -20,7 +20,8 @@ public class RecurrentTask extends Task{
     Calendar endCalendar;
     Calendar nextOccurence;
 
-    public RecurrentTask(String id, String title, String description, Category category, Status status, String userId, Priority priority, boolean enableNotif, LocalDateTime updatedAt, LocalDateTime createdAt, Frequency freq, Calendar startDate, Calendar endDate, Calendar nextOccurence) {
+    public RecurrentTask(String id, String title, String description, Category category, Status status, String userId, Priority priority, boolean enableNotif, LocalDateTime updatedAt,
+                         LocalDateTime createdAt, Frequency freq, Calendar startDate, Calendar endDate, Calendar nextOccurence) {
         super(id, title, description, category, status, userId, priority, enableNotif, updatedAt, createdAt);
         this.freq = freq;
         this.startCalendar = startDate;
