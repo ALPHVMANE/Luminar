@@ -16,7 +16,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/logo_luminar"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Luminar">
+        android:theme ="@style/Theme.Luminar" >
         <activity
             android:name=".NotificationActivity"
             android:launchMode="singleTop"

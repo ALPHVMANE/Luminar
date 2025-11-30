@@ -2,6 +2,7 @@ package com.example.luminar;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -48,13 +49,18 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_addtask);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+
+        // Fixes previous error of page not loading
+        View mainView = findViewById(R.id.main);
+        if (mainView != null) {
+            EdgeToEdge.enable(this);
+            ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+                Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+                return insets;
+            });
+        }
         initialize();
     }
 
@@ -156,6 +162,7 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
                 (view, selectedYear, selectedMonth, selectedDay) -> {
                     goalDateCalendar.set(selectedYear, selectedMonth, selectedDay);
                     String displayDate = selectedYear + "/" + (selectedMonth + 1) + "/" + selectedDay;
+                    edtGoalDate.setText(displayDate);
                 },
                 year, month, day
         );
@@ -223,7 +230,10 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
             }
 
             // Timestamp
-            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime now = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                now = LocalDateTime.now();
+            }
 
             // Default values
             Status status = Status.TODO;
@@ -247,6 +257,7 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
 
                 task.save(task);
                 Snackbar.make(v, "Recurrent task '" + name + "' created successfully", Snackbar.LENGTH_LONG).show();
+                finish();
             } else {
                 // Non-recurring tasks
                 NonRecurrentTask task = new NonRecurrentTask(
@@ -255,6 +266,7 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
 
                 task.save(task);
                 Snackbar.make(v, "Task '" + name + "' created successfully", Snackbar.LENGTH_LONG).show();
+                finish();
             }
 
             // Clear all
