@@ -29,12 +29,12 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
     CalendarView calendar;
     TextView calendarDate;
     ListView lvTasks;
-    Button btnAdd;
     ArrayList<Task> taskList;
     ArrayList<Task> currentDateTasks;
     TaskAdapter taskAdapter;
     private boolean isRecurring = false;
-    DatabaseReference luminarDB = FirebaseDatabase.getInstance().getReference("users");
+    DatabaseReference nTasksDB = FirebaseDatabase.getInstance().getReference("tasks");
+    DatabaseReference rTasksDB = FirebaseDatabase.getInstance().getReference("recurringTasks");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,17 +53,15 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
         calendarDate = findViewById(R.id.calendarDate);
         lvTasks = findViewById(R.id.listTasks);
         lvTasks.setOnItemClickListener(this);
-        btnAdd = findViewById(R.id.btnAddTask);
-        btnAdd.setOnClickListener(this);
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setSelectedItemId(R.id.nav_calendar);
         NavigationHelper.setupBottomNavigation(this, bottomNav, R.id.nav_calendar);
 
         taskList = new ArrayList<>();
-        luminarDB.child("tasks").addValueEventListener(this);
+        nTasksDB.child(Global.getUid()).addValueEventListener(this);
         isRecurring = true;
-        luminarDB.child("recurringTasks").addValueEventListener(this);
+        rTasksDB.child(Global.getUid()).addValueEventListener(this);
 
         currentDateTasks = new ArrayList<>();
         calendar.setOnDateChangeListener(this);
