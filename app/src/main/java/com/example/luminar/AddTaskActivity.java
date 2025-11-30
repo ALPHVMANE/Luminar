@@ -2,6 +2,7 @@ package com.example.luminar;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -223,7 +224,10 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
             }
 
             // Timestamp
-            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime now = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                now = LocalDateTime.now();
+            }
 
             // Default values
             Status status = Status.TODO;

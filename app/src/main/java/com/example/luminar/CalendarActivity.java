@@ -137,7 +137,7 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
     @Override
     public void onCancelled(@NonNull DatabaseError error) {
         System.out.println("Error: " + error.getMessage());
-        Toast.makeText(this, "Error: ", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "Error: ", Toast.LENGTH_LONG).show();
     }
 
     @Override
