@@ -14,6 +14,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.time.LocalDateTime;
@@ -21,6 +22,7 @@ import java.util.Calendar;
 import java.util.UUID;
 
 import model.*;
+import services.NavigationHelper;
 
 public class AddTaskActivity extends AppCompatActivity implements View.OnClickListener {
     EditText edtName, edtNotes, edtGoalDate, edtStartTime, edtEndTime;
@@ -93,6 +95,11 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
         edtGoalDate.setOnClickListener(this);
         edtStartTime.setOnClickListener(this);
         edtEndTime.setOnClickListener(this);
+
+
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setSelectedItemId(R.id.nav_calendar);
+        NavigationHelper.setupBottomNavigation(this, bottomNav, R.id.nav_add_task);
 
         // Ensure date/time cannot be edited by keyboard, only by Calendar itself
         // + initialize calendars
