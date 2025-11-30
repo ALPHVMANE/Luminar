@@ -50,7 +50,7 @@ public class NonRecurrentTask extends Task {
     }
 
     //load
-    public void load(String id, Consumer<NonRecurrentTask> onResult){
+    public static void load(String id, Consumer<NonRecurrentTask> onResult){
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("tasks").child(Global.getUid()).child(id);
 
         ref.addListenerForSingleValueEvent(new ValueEventListener() {

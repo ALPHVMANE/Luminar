@@ -2,238 +2,284 @@ package com.example.luminar;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.*;
 
-import androidx.appcompat.app.AlertDialog;
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.UUID;
 
-import model.Category;
-import model.Frequency;
-import model.Global;
-import model.NonRecurrentTask;
-import model.Priority;
-import model.RecurrentTask;
-import model.Status;
-import services.NavigationHelper;
+import model.*;
 
-public class AddTaskActivity extends AppCompatActivity {
+public class AddTaskActivity extends AppCompatActivity implements View.OnClickListener {
+    EditText edtName, edtNotes, edtGoalDate, edtStartTime, edtEndTime;
+    Button btnSubmit;
+    Spinner spnCategory, spnFrequency;
+    CheckBox checkBoxRecurrent, chkNotifications;
+    Calendar goalDateCalendar, startTimeCalendar, endTimeCalendar;
 
-    private EditText edtName, edtNotes, edtGoalDate, edtStartTime, edtEndTime, edtFrequency, edtReminder, edtPickColor;
-    private Button btnSubmit;
-    private BottomNavigationView bottomNavigationView;
+    // Set the categories (set hex colors)
+    Category[] categories = {
+            new Category(1, "Personal", "FF6B6B"),
+            new Category(2, "Work", "4ECDC4"),
+            new Category(3, "Health", "93E1D3"),
+            new Category(4, "Education", "F38181"),
+            new Category(5, "Finance", "AA96DA")
+    };
 
+    // Set the frequencies
+    Frequency[] frequencies = {
+            Frequency.DAILY,
+            Frequency.WEEKLY,
+            Frequency.MONTHLY,
+            Frequency.YEARLY
+    };
 
-    private Calendar selectedGoalDate;
-        private Calendar selectedStartTime;
-        private Calendar selectedEndTime;
-        private Frequency selectedFrequency;
-        private String selectedColor = "#4CAF50"; // Default color
-        private Category selectedCategory = new Category(1, "Work", "#4CAF50"); // Default category
-        private Priority selectedPriority = Priority.MEDIUM; // Default priority
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_addtask);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+        initialize();
+    }
 
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_addtask);
-
-            initializeViews();
-            setupClickListeners();
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if (id == R.id.btnSubmit) {
+            saveTask(v);
+        } else if (id == R.id.edtGoalDate) {
+            showDatePicker();
+        } else if (id == R.id.edtStartTime) {
+            showTimePicker(true);
+        } else if (id == R.id.edtEndTime) {
+            showTimePicker(false);
         }
+    }
 
-        private void initializeViews() {
+    private void initialize() {
         edtName = findViewById(R.id.edtName);
         edtNotes = findViewById(R.id.edtNotes);
         edtGoalDate = findViewById(R.id.edtGoalDate);
         edtStartTime = findViewById(R.id.edtStartTime);
         edtEndTime = findViewById(R.id.edtEndTime);
-        edtFrequency = findViewById(R.id.edtFrequency);
-        edtReminder = findViewById(R.id.edtReminder);
-        edtPickColor = findViewById(R.id.edtPickColor);
         btnSubmit = findViewById(R.id.btnSubmit);
+        spnCategory = findViewById(R.id.spnCategory);
+        spnFrequency = findViewById(R.id.spnFrequency);
+        checkBoxRecurrent = findViewById(R.id.checkBox);
+        chkNotifications = findViewById(R.id.chkNotifications);
+        btnSubmit.setOnClickListener(this);
+        edtGoalDate.setOnClickListener(this);
+        edtStartTime.setOnClickListener(this);
+        edtEndTime.setOnClickListener(this);
 
-        // Make EditTexts non-editable (they open dialogs instead)
+        // Ensure date/time cannot be edited by keyboard, only by Calendar itself
+        // + initialize calendars
         edtGoalDate.setFocusable(false);
         edtStartTime.setFocusable(false);
         edtEndTime.setFocusable(false);
-        edtFrequency.setFocusable(false);
-        edtPickColor.setFocusable(false);
+        goalDateCalendar = Calendar.getInstance();
+        startTimeCalendar = Calendar.getInstance();
+        endTimeCalendar = Calendar.getInstance();
 
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
-        NavigationHelper.setupBottomNavigation(this, bottomNavigationView, R.id.nav_add_task);
-    }
+        // Spinners
+        setupCategorySpinner();
+        setupFrequencySpinner();
 
-    private void setupClickListeners() {
-        // Goal Date Picker
-        edtGoalDate.setOnClickListener(v -> showDatePicker());
-
-        // Start Time Picker
-        edtStartTime.setOnClickListener(v -> showTimePicker(true));
-
-        // End Time Picker
-        edtEndTime.setOnClickListener(v -> showTimePicker(false));
-
-        // Frequency Selector
-        edtFrequency.setOnClickListener(v -> showFrequencyDialog());
-
-        // Color Picker
-        edtPickColor.setOnClickListener(v -> showColorPicker());
-
-        // Reminder (could be expanded to show time picker for reminder time)
-        edtReminder.setOnClickListener(v -> {
-            Toast.makeText(this, "Reminder feature - coming soon", Toast.LENGTH_SHORT).show();
+        // Checkboxes
+        checkBoxRecurrent.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            spnFrequency.setEnabled(isChecked);
+            if (!isChecked) {
+                spnFrequency.setSelection(0);
+            }
         });
 
-        // Submit Button
-        btnSubmit.setOnClickListener(v -> saveTask());
+        spnFrequency.setEnabled(false);
+    }
+
+    private void setupCategorySpinner() {
+        String[] category = new String[categories.length];
+        for (int i = 0; i < categories.length; i++) {
+            category[i] = categories[i].getName();
+        }
+
+        // Set into ArrayAdapter
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                category
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnCategory.setAdapter(adapter);
+    }
+
+    private void setupFrequencySpinner() {
+        String[] freq = new String[frequencies.length];
+        for (int i = 0; i < frequencies.length; i++) {
+            freq[i] = frequencies[i].name();
+        }
+
+        // Set into ArrayAdapter
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                freq
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnFrequency.setAdapter(adapter);
     }
 
     private void showDatePicker() {
         Calendar calendar = Calendar.getInstance();
+        int year, month, day;
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH);
+        day = calendar.get(Calendar.DATE);
+
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 this,
-                (view, year, month, dayOfMonth) -> {
-                    selectedGoalDate = Calendar.getInstance();
-                    selectedGoalDate.set(year, month, dayOfMonth);
-                    edtGoalDate.setText(String.format("%02d/%02d/%d", dayOfMonth, month + 1, year));
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    goalDateCalendar.set(selectedYear, selectedMonth, selectedDay);
+                    String displayDate = selectedYear + "/" + (selectedMonth + 1) + "/" + selectedDay;
                 },
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)
+                year, month, day
         );
         datePickerDialog.show();
     }
 
     private void showTimePicker(boolean isStartTime) {
         Calendar calendar = Calendar.getInstance();
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this, (view, hourOfDay, minute) -> {
-                    Calendar timeCalendar = Calendar.getInstance();
-                    timeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                    timeCalendar.set(Calendar.MINUTE, minute);
+        int hour, minute;
+        hour = calendar.get(Calendar.HOUR_OF_DAY);
+        minute = calendar.get(Calendar.MINUTE);
 
-                    String timeString = String.format("%02d:%02d", hourOfDay, minute);
-
+        TimePickerDialog timePickerDialog = new TimePickerDialog(
+                this,
+                (view, selectedHour, selectedMinute) -> {
+                    String displayTime = String.format("%02d:%02d", selectedHour, selectedMinute);
                     if (isStartTime) {
-                        selectedStartTime = timeCalendar;
-                        edtStartTime.setText(timeString);
+                        startTimeCalendar.set(Calendar.HOUR_OF_DAY, selectedHour);
+                        startTimeCalendar.set(Calendar.MINUTE, selectedMinute);
+                        edtStartTime.setText(displayTime);
                     } else {
-                        selectedEndTime = timeCalendar;
-                        edtEndTime.setText(timeString);
+                        endTimeCalendar.set(Calendar.HOUR_OF_DAY, selectedHour);
+                        endTimeCalendar.set(Calendar.MINUTE, selectedMinute);
+                        edtEndTime.setText(displayTime);
                     }
                 },
-                calendar.get(Calendar.HOUR_OF_DAY),
-                calendar.get(Calendar.MINUTE),
-                true
+                hour, minute, true
         );
         timePickerDialog.show();
     }
 
-    private void showFrequencyDialog() {
-        String[] frequencies = {"None (One-time task)", "Daily", "Weekly", "Monthly", "Yearly"};
+    private void saveTask(View v) {
+        try {
+            // Get inputs
+            String name, notes, goalDate;
+            name = edtName.getText().toString().trim();
+            notes = edtNotes.getText().toString().trim();
+            goalDate = edtGoalDate.getText().toString().trim();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Select Frequency")
-                .setItems(frequencies, (dialog, which) -> {
-                    switch (which) {
-                        case 0:
-                            selectedFrequency = null;
-                            edtFrequency.setText("One-time task");
-                            break;
-                        case 1:
-                            selectedFrequency = Frequency.DAILY;
-                            edtFrequency.setText("Daily");
-                            break;
-                        case 2:
-                            selectedFrequency = Frequency.WEEKLY;
-                            edtFrequency.setText("Weekly");
-                            break;
-                        case 3:
-                            selectedFrequency = Frequency.MONTHLY;
-                            edtFrequency.setText("Monthly");
-                            break;
-                        case 4:
-                            selectedFrequency = Frequency.YEARLY;
-                            edtFrequency.setText("Yearly");
-                            break;
-                    }
-                })
-                .show();
+            boolean isRecurrent, enableNotif;
+            isRecurrent = checkBoxRecurrent.isChecked();
+            enableNotif = chkNotifications.isChecked();
+
+            // Validation
+            if (name.isEmpty()) {
+                Snackbar.make(v, "Please enter a task name", Snackbar.LENGTH_LONG).show();
+                return;
+            }
+
+            if (goalDate.isEmpty()) {
+                Snackbar.make(v, "Please select a goal date", Snackbar.LENGTH_LONG).show();
+                return;
+            }
+
+            // Get category
+            int categoryPosition = spnCategory.getSelectedItemPosition();
+            Category selectedCategory = categories[categoryPosition];
+
+            // User ID
+            String taskId = UUID.randomUUID().toString();
+            String userId = Global.getUid();
+            if (userId == null || userId.isEmpty()) {
+                Snackbar.make(v, "User not logged in", Snackbar.LENGTH_LONG).show();
+                return;
+            }
+
+            // Timestamp
+            LocalDateTime now = LocalDateTime.now();
+
+            // Default values
+            Status status = Status.TODO;
+            Priority priority = Priority.MEDIUM;
+
+            if (isRecurrent) {
+                int freqPosition = spnFrequency.getSelectedItemPosition();
+                Frequency selectedFrequency = frequencies[freqPosition];
+
+                String startTime = edtStartTime.getText().toString().trim();
+                String endTime = edtEndTime.getText().toString().trim();
+
+                if (startTime.isEmpty() || endTime.isEmpty()) {
+                    Snackbar.make(v, "Please set start/end times for recurrent tasks", Snackbar.LENGTH_LONG).show();
+                    return;
+                }
+
+                RecurrentTask task = new RecurrentTask(
+                        taskId, name, notes, selectedCategory, status, userId, priority, enableNotif, now, now, selectedFrequency, (Calendar) startTimeCalendar.clone(), (Calendar) endTimeCalendar.clone(), (Calendar) goalDateCalendar.clone()
+                );
+
+                task.save(task);
+                Snackbar.make(v, "Recurrent task '" + name + "' created successfully", Snackbar.LENGTH_LONG).show();
+            } else {
+                // Non-recurring tasks
+                NonRecurrentTask task = new NonRecurrentTask(
+                        taskId, name, notes, selectedCategory, status, userId, priority, enableNotif, now, now, (Calendar) goalDateCalendar.clone()
+                );
+
+                task.save(task);
+                Snackbar.make(v, "Task '" + name + "' created successfully", Snackbar.LENGTH_LONG).show();
+            }
+
+            // Clear all
+            resetWidgets();
+        } catch (Exception e) {
+            Log.e("AddTaskActivity", "Error saving task: " + e.getMessage());
+            e.printStackTrace();
+            Snackbar.make(v, "Error creating task: " + e.getMessage(), Snackbar.LENGTH_LONG).show();
+        }
     }
-    private void saveTask() {
-        // Validate
-        String taskName = edtName.getText().toString().trim();
-        if (taskName.isEmpty()) {
-            Toast.makeText(this, "Please enter a task name", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
-        String taskNotes = edtNotes.getText().toString().trim();
-        String taskId = UUID.randomUUID().toString();
-        String userId = Global.getUid();
-        LocalDateTime now = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            now = LocalDateTime.now();
-        }
-
-        // Check the type of task (recurring or non-recurring)
-        // Recurring task
-        if (selectedFrequency != null && selectedStartTime != null) {
-            RecurrentTask recurrentTask = new RecurrentTask(taskId, taskName, taskNotes, selectedCategory, Status.TODO, userId, selectedPriority, true, now, now);
-
-            recurrentTask.setFreq(selectedFrequency);
-            recurrentTask.setStartCalendar(selectedStartTime);
-            recurrentTask.setEndCalendar(selectedEndTime != null ? selectedEndTime : selectedStartTime);
-            recurrentTask.setNextOccurence(selectedStartTime);
-
-            // Save to Firebase
-            recurrentTask.save(recurrentTask);
-
-            Toast.makeText(this, "Recurrent task saved successfully!", Toast.LENGTH_SHORT).show();
-            Log.d("AddTask", "Recurrent task created: " + taskName);
-
-            // Non-recurrent task
-        } else if (selectedGoalDate != null) {
-            NonRecurrentTask nonRecurrentTask = new NonRecurrentTask(
-                    taskId,
-                    taskName,
-                    taskNotes,
-                    selectedCategory,
-                    Status.TODO,
-                    userId,
-                    selectedPriority,
-                    true, // enableNotif
-                    now,
-                    now
-            );
-
-            nonRecurrentTask.setDueDate(selectedGoalDate);
-
-            // Save to Firebase
-            nonRecurrentTask.save(nonRecurrentTask);
-
-            Toast.makeText(this, "Task saved successfully!", Toast.LENGTH_SHORT).show();
-            Log.d("AddTask", "Non-recurrent task created: " + taskName);
-
-        } else {
-            Toast.makeText(this, "Please select either a goal date or frequency", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Close activity after saving
-        finish();
+    private void resetWidgets() {
+        edtName.setText(null);
+        edtNotes.setText(null);
+        edtGoalDate.setText(null);
+        edtStartTime.setText(null);
+        edtEndTime.setText(null);
+        spnCategory.setSelection(0);
+        spnFrequency.setSelection(0);
+        checkBoxRecurrent.setChecked(false);
+        chkNotifications.setChecked(false);
+        goalDateCalendar = Calendar.getInstance();
+        startTimeCalendar = Calendar.getInstance();
+        endTimeCalendar = Calendar.getInstance();
     }
+
+
 }

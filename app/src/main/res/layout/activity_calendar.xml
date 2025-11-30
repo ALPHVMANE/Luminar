@@ -50,7 +50,8 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="350dp"
+            app:layout_constraintHeight_percent="0.5">
 
             <Button
                 android:id="@+id/btnAddTask"
