@@ -26,6 +26,9 @@
             android:launchMode="singleTop"
             android:exported="false" />
         <activity
+            android:name=".BottomSheetActivity"
+            android:exported="false" />
+        <activity
             android:name=".RegisterActivity"
             android:exported="false" />
         <activity
@@ -41,7 +44,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
-
+    </application>
         <service
             android:name="services.FCM"
             android:exported="false">

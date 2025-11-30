@@ -73,9 +73,19 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
         taskAdapter.notifyDataSetChanged();
     }
 
+    //to learn more: https://stackoverflow.com/questions/32867968/how-to-get-item-from-listview-onitemclick-in-android
     @Override
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-        //Add fragments
+
+        Task clickedTask = (Task) parent.getItemAtPosition(position);
+        Intent intent = new Intent(this, BottomSheetActivity.class);
+        if (clickedTask instanceof NonRecurrentTask) {
+            intent.putExtra("type", false);
+        } else if (clickedTask instanceof RecurrentTask) {
+            intent.putExtra("type", true);
+        }
+        intent.putExtra("taskId", clickedTask.getId());
+        startActivity(intent);
     }
     @Override
     public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
