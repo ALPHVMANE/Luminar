@@ -33,9 +33,10 @@ public class NotificationActivity extends AppCompatActivity {
 
     private void initialize() {
         listNotifications = findViewById(R.id.listNotifications);
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
-        NavigationHelper.setupBottomNavigation(this, bottomNavigationView, R.id.nav_notifications);
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setSelectedItemId(R.id.nav_notifications);
+        NavigationHelper.setupBottomNavigation(this, bottomNav, R.id.nav_notifications);
+
         loadNotifications();
     }
 

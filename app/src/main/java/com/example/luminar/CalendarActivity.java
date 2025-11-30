@@ -1,7 +1,6 @@
 package com.example.luminar;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
@@ -9,11 +8,11 @@ import android.widget.*;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,21 +23,17 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import model.*;
+import services.NavigationHelper;
 
 public class CalendarActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener, CalendarView.OnDateChangeListener, ValueEventListener {
     CalendarView calendar;
     TextView calendarDate;
     ListView lvTasks;
-
     Button btnAdd;
-
-    ImageView colorCategory;
     ArrayList<Task> taskList;
     ArrayList<Task> currentDateTasks;
     TaskAdapter taskAdapter;
-
     private boolean isRecurring = false;
-
     DatabaseReference luminarDB = FirebaseDatabase.getInstance().getReference("users");
 
     @Override
@@ -61,6 +56,10 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
         btnAdd = findViewById(R.id.btnAddTask);
         btnAdd.setOnClickListener(this);
 
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setSelectedItemId(R.id.nav_calendar);
+        NavigationHelper.setupBottomNavigation(this, bottomNav, R.id.nav_calendar);
+
         taskList = new ArrayList<>();
         luminarDB.child("tasks").addValueEventListener(this);
         isRecurring = true;
@@ -74,12 +73,10 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
         taskAdapter.notifyDataSetChanged();
     }
 
-
     @Override
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
         //Add fragments
     }
-
     @Override
     public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
         Calendar calDate = Calendar.getInstance();
@@ -137,7 +134,7 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
     @Override
     public void onCancelled(@NonNull DatabaseError error) {
         System.out.println("Error: " + error.getMessage());
-        Toast.makeText(this, "Error: ", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "Error: ", Toast.LENGTH_LONG).show();
     }
 
     @Override
