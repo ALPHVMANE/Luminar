@@ -260,12 +260,11 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
                 long endTimeMillis = endTimeCalendar.getTimeInMillis();
                 long goalDateMillis = goalDateCalendar.getTimeInMillis();
 
-                RecurrentTask task = new RecurrentTask(
-                        taskId, name, notes, selectedCategory, status, userId, priority, enableNotif, now, now, selectedFrequency,
-                        startTimeMillis, endTimeMillis, goalDateMillis
+                // Add tasks based on frequency
+                int tasksCreated = createRecurrentTasks(name, notes, selectedCategory, status, userId, priority,
+                        enableNotif, now, selectedFrequency, startTimeMillis, endTimeMillis, goalDateMillis
                 );
 
-                task.save(task);
                 Snackbar.make(v, "Recurrent task '" + name + "' created successfully", Snackbar.LENGTH_LONG).show();
                 finish();
             } else {
@@ -289,6 +288,58 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
             e.printStackTrace();
             Snackbar.make(v, "Error creating task: " + e.getMessage(), Snackbar.LENGTH_LONG).show();
         }
+    }
+
+    private int createRecurrentTasks(String name, String notes, Category category, Status status, String userId, Priority priority, boolean enableNotif,
+                                     long now, Frequency freq, long startTimeMillis, long endTimeMillis, long goalDateMillis) {
+        Calendar currentDate = Calendar.getInstance();
+        currentDate.setTimeInMillis(now);
+        Calendar endDate = Calendar.getInstance();
+        endDate.setTimeInMillis(goalDateMillis);
+        int tasksCreated = 0;
+
+        // Create tasks until end date
+        while (currentDate.getTimeInMillis() <= endDate.getTimeInMillis()) {
+            String taskId = UUID.randomUUID().toString();
+            Calendar instanceDueDate = (Calendar) currentDate.clone();
+
+            // Set time from startTimeCalendar
+            instanceDueDate.set(Calendar.HOUR_OF_DAY, startTimeCalendar.get(Calendar.HOUR_OF_DAY));
+            instanceDueDate.set(Calendar.MINUTE, startTimeCalendar.get(Calendar.MINUTE));
+            instanceDueDate.set(Calendar.SECOND, 0);
+            instanceDueDate.set(Calendar.MILLISECOND, 0);
+            long instanceDueDateMillis = instanceDueDate.getTimeInMillis();
+
+            // Set the task
+            RecurrentTask task = new RecurrentTask(
+                    taskId, name, notes, category, status, userId, priority, enableNotif,
+                    now, now, freq, startTimeMillis, endTimeMillis, instanceDueDateMillis
+            );
+
+            // Save + Create task
+            task.save(task);
+            tasksCreated++;
+
+            // Move to next occurrence based on freq
+            switch (freq) {
+                case DAILY:
+                    currentDate.add(Calendar.DAY_OF_MONTH, 1);
+                    break;
+                case WEEKLY:
+                    currentDate.add(Calendar.WEEK_OF_YEAR, 1);
+                    break;
+                case MONTHLY:
+                    currentDate.add(Calendar.MONTH, 1);
+                    break;
+                case YEARLY:
+                    currentDate.add(Calendar.YEAR, 1);
+                    break;
+            }
+        }
+
+        // LogCat
+        Log.d("AddTaskActivity", "Created " + tasksCreated + " recurrent tasks with the following frequency:" + freq);
+        return tasksCreated;
     }
 
     private void resetWidgets() {
