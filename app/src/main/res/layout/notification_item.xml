@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="12dp">
+
+    <!-- STATUS CIRCLE -->
+    <View
+        android:id="@+id/statusCircle"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/circle_shape" />
+
+    <!-- TITLE -->
+    <TextView
+        android:id="@+id/tvNotificationTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/statusCircle"
+        android:layout_alignParentTop="true"
+        android:text="Notification Title"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:layout_marginEnd="12dp"/>
+
+    <!-- TIME (top-right) -->
+    <TextView
+        android:id="@+id/tvNotificationTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@id/tvNotificationTitle"
+        android:text="12:30"
+        android:textSize="12sp"
+        android:textColor="#666"/>
+
+    <!-- DESCRIPTION -->
+    <TextView
+        android:id="@+id/tvNotificationMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvNotificationTitle"
+        android:layout_toEndOf="@id/statusCircle"
+        android:layout_marginTop="4dp"
+        android:text="Description goes here"
+        android:textSize="14sp"
+        android:textColor="#444"/>
+</RelativeLayout>

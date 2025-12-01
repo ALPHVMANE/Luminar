@@ -97,7 +97,7 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
         }
     }
 
-@Override
+    @Override
     public void onDataChange(@NonNull DataSnapshot snapshot) {
         if (snapshot.exists()){
             if (!isRecurring){
