@@ -79,4 +79,16 @@
 
         android:paddingVertical="10dp" />
 
+
+    <TextView
+        android:id="@+id/tvLogin_Register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Already a member?"
+        android:gravity="center"
+        android:clickable="true"
+        android:textColor="#1387AB"
+        />
+
 </LinearLayout>

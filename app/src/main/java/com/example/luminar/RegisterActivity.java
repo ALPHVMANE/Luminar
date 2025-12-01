@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -23,6 +24,7 @@ import model.User;
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
     EditText edUsername, edEmail, edPassword;
     Button btnRegister;
+    TextView tvLogin;
     private FirebaseAuth mAuth;
 
     @Override
@@ -44,32 +46,42 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         edPassword = findViewById(R.id.edtPassword);
         edUsername = findViewById(R.id.edtName);
         btnRegister = findViewById(R.id.btnRegister);
+        tvLogin= findViewById(R.id.tvLogin_Register);
+        tvLogin.setOnClickListener(this);
         btnRegister.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        String username = edUsername.getText().toString().trim();
-        String email = edEmail.getText().toString().trim();
-        String password = edPassword.getText().toString().trim();
 
-        if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Fields cannot be empty!", Toast.LENGTH_SHORT).show();
-            return;
+        if(v.getId() == R.id.tvLogin_Register){
+            startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+            finish();
         }
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(this, "Please enter a valid email address", Toast.LENGTH_SHORT).show();
-            return;
+
+        if (v.getId() == R.id.btnRegister) {
+            String username = edUsername.getText().toString().trim();
+            String email = edEmail.getText().toString().trim();
+            String password = edPassword.getText().toString().trim();
+
+            if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Fields cannot be empty!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                Toast.makeText(this, "Please enter a valid email address", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (password.length() < 6) {
+                Toast.makeText(this, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (username.length() < 3) {
+                Toast.makeText(this, "Username must be at least 3 characters", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            registerUser(username, email, password);
         }
-        if (password.length() < 6) {
-            Toast.makeText(this, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (username.length() < 3) {
-            Toast.makeText(this, "Username must be at least 3 characters", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        registerUser(username, email, password);
     }
 
 
