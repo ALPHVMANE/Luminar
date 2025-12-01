@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.time.*;
 
 public abstract class Task {
@@ -9,10 +10,11 @@ public abstract class Task {
     private Category category;
     private Status status;
     private String userId;
-    private LocalDateTime updatedAt;
-    private LocalDateTime createdAt;
+    private transient LocalDateTime updatedAt;
+    private transient  LocalDateTime createdAt;
     private Priority priority;
     private boolean enableNotif;
+
 
     public Task(String id, String title, String description, Category category, Status status, String userId, Priority priority, boolean enableNotif, LocalDateTime updatedAt, LocalDateTime createdAt) {
         this.id = id;
@@ -68,6 +70,7 @@ public abstract class Task {
     public void setUserId(String user) {
         this.userId = user;
     }
+
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;

@@ -17,6 +17,7 @@ import java.util.function.Consumer;
 public class NonRecurrentTask extends Task {
     private Calendar dueDate;
 
+
     public NonRecurrentTask(String id, String title, String description, Category category, Status status, String userId, Priority priority, boolean enableNotif, LocalDateTime updatedAt, LocalDateTime createdAt, Calendar dueDate) {
         super(id, title, description, category, status, userId, priority, enableNotif, updatedAt, createdAt);
         this.dueDate = dueDate;

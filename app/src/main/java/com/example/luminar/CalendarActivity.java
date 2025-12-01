@@ -2,6 +2,7 @@ package com.example.luminar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
 
@@ -21,6 +22,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import model.*;
 import services.NavigationHelper;
@@ -29,7 +32,7 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
     CalendarView calendar;
     TextView calendarDate;
     ListView lvTasks;
-    ArrayList<Task> taskList;
+    HashMap<String, String> taskIds;
     ArrayList<Task> currentDateTasks;
     TaskAdapter taskAdapter;
     private boolean isRecurring = false;
@@ -58,7 +61,7 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
         bottomNav.setSelectedItemId(R.id.nav_calendar);
         NavigationHelper.setupBottomNavigation(this, bottomNav, R.id.nav_calendar);
 
-        taskList = new ArrayList<>();
+        taskIds = new HashMap<>();
         nTasksDB.child(Global.getUid()).addValueEventListener(this);
         isRecurring = true;
         rTasksDB.child(Global.getUid()).addValueEventListener(this);
@@ -87,56 +90,71 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
     }
     @Override
     public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-        Calendar calDate = Calendar.getInstance();
-        calDate.set(year, month, dayOfMonth);
-        String date = dayOfMonth + "/" + (month + 1) + "/" + year;
 
-        calendarDate.setText(date);
+        Calendar cal = Calendar.getInstance();
+        cal.set(year, month, dayOfMonth, 0, 0, 0);
+        cal.set(Calendar.MILLISECOND, 0);
 
-        //search in array all tasks said date and add it into a separate list
-        for (Task item : taskList) {
+        long startOfDay = cal.getTimeInMillis();
 
-            if (item instanceof NonRecurrentTask && calDate == ((NonRecurrentTask) item).getDueDate()) {
-                currentDateTasks.add(item);
-            }
-            else if (item instanceof RecurrentTask && calDate == ((RecurrentTask) item).getStartCalendar()) {
-                currentDateTasks.add(item);
-            }
-        }
+        cal.set(year, month, dayOfMonth, 23, 59, 59);
+        cal.set(Calendar.MILLISECOND, 999);
+
+        long endOfDay = cal.getTimeInMillis();
+
+        getTasksForDay(startOfDay, endOfDay);
+
+
     }
 
-@Override
+    private void getTasksForDay(long start, long end) {
+
+    }
+
+    @Override
     public void onDataChange(@NonNull DataSnapshot snapshot) {
+//        if (snapshot.exists()){
+//            if (!isRecurring){
+//                for (DataSnapshot taskSnapshot : snapshot.getChildren()) {
+//
+//                    NonRecurrentTask ntask = taskSnapshot.getValue(NonRecurrentTask.class);
+//
+//                    if (ntask != null) {
+//                        ntask.setId(taskSnapshot.getKey());
+//                    }
+//                    taskList.add(ntask);
+//                }
+//
+//                System.out.println(taskList);
+//            }
+//            else{
+//                for (DataSnapshot taskSnapshot : snapshot.getChildren()) {
+//
+//                    RecurrentTask rtask = taskSnapshot.getValue(RecurrentTask.class);
+//
+//                    if (rtask != null) {
+//                        rtask.setId(taskSnapshot.getKey());
+//                    }
+//                    taskList.add(rtask);
+//                }
+//
+//                System.out.println(taskList);
+//            }
+//        }else{
+//            Toast.makeText(this, "0 tasks", Toast.LENGTH_LONG).show();
+//        }
         if (snapshot.exists()){
-            if (!isRecurring){
-                for (DataSnapshot taskSnapshot : snapshot.getChildren()) {
-
-                    NonRecurrentTask ntask = taskSnapshot.getValue(NonRecurrentTask.class);
-
-                    if (ntask != null) {
-                        ntask.setId(taskSnapshot.getKey());
-                    }
-                    taskList.add(ntask);
-                }
-
-                System.out.println(taskList);
+            for (DataSnapshot ds : snapshot.getChildren()) {
+                taskIds.put(ds.getKey(), "NonRecurrent");
             }
-            else{
-                for (DataSnapshot taskSnapshot : snapshot.getChildren()) {
-
-                    RecurrentTask rtask = taskSnapshot.getValue(RecurrentTask.class);
-
-                    if (rtask != null) {
-                        rtask.setId(taskSnapshot.getKey());
-                    }
-                    taskList.add(rtask);
-                }
-
-                System.out.println(taskList);
-            }
-        }else{
-            Toast.makeText(this, "0 tasks", Toast.LENGTH_LONG).show();
         }
+        else{
+            Toast.makeText(CalendarActivity.this,
+                    "0 tasks",
+                    Toast.LENGTH_LONG).show();
+        }
+
+        Log.d("TASK_IDS", taskIds.toString());
     }
 
     @Override
