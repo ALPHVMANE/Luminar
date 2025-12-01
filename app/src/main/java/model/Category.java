@@ -11,6 +11,10 @@ public class Category {
         this.hex = hex;
     }
 
+    public Category() {
+
+    }
+
     public int getId() {
         return id;
     }
