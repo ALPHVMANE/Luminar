@@ -95,10 +95,24 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
         cal.set(year, month, dayOfMonth, 0, 0, 0);
         cal.set(Calendar.MILLISECOND, 0);
 
-        long startOfDay = cal.getTimeInMillis();
-
-        cal.set(year, month, dayOfMonth, 23, 59, 59);
-        cal.set(Calendar.MILLISECOND, 999);
+        //search in array all tasks said date and add it into a separate list
+        for (Task item : taskList) {
+            long selectedDateMillis = calDate.getTimeInMillis();
+            if (item instanceof NonRecurrentTask) {
+                NonRecurrentTask nt = (NonRecurrentTask) item;
+                if (selectedDateMillis == nt.getDueDate()) {
+                    currentDateTasks.add(nt);
+                }
+            } else if (item instanceof RecurrentTask) {
+                RecurrentTask rt = (RecurrentTask) item;
+                if (selectedDateMillis == rt.getStartCalendar()) {
+                    currentDateTasks.add(rt);
+                }
+            }
+        }
+        // Notify changes internally
+        taskAdapter.notifyDataSetChanged();
+    }
 
         long endOfDay = cal.getTimeInMillis();
 

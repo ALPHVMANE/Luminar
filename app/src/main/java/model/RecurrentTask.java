@@ -16,19 +16,21 @@ import java.util.function.Consumer;
 
 public class RecurrentTask extends Task{
     Frequency freq;
-    Calendar startCalendar;
-    Calendar endCalendar;
-    Calendar nextOccurence;
+    long startCalendar;
+    long endCalendar;
+    long nextOccurence;
 
-
-
-    public RecurrentTask(String id, String title, String description, Category category, Status status, String userId, Priority priority, boolean enableNotif, LocalDateTime updatedAt,
-                         LocalDateTime createdAt, Frequency freq, Calendar startDate, Calendar endDate, Calendar nextOccurence) {
+    public RecurrentTask(String id, String title, String description, Category category, Status status, String userId, Priority priority, boolean enableNotif, long updatedAt,
+                         long createdAt, Frequency freq, long startDate, long endDate, long nextOccurence) {
         super(id, title, description, category, status, userId, priority, enableNotif, updatedAt, createdAt);
         this.freq = freq;
         this.startCalendar = startDate;
         this.endCalendar = endDate;
         this.nextOccurence = nextOccurence;
+    }
+
+    public RecurrentTask() {
+        super();
     }
 
 
@@ -38,47 +40,47 @@ public class RecurrentTask extends Task{
         this.freq = freq;
     }
 
-    public Calendar getStartCalendar() {
+    public long getStartCalendar() {
         return startCalendar;
     }
 
-    public void setStartCalendar(Calendar startCalendar) {
+    public void setStartCalendar(long startCalendar) {
         this.startCalendar = startCalendar;
     }
 
-    public Calendar getEndCalendar() {
+    public long getEndCalendar() {
         return endCalendar;
     }
 
-    public void setEndCalendar(Calendar endCalendar) {
+    public void setEndCalendar(long endCalendar) {
         this.endCalendar = endCalendar;
     }
 
-    public Calendar getNextOccurence() {
+    public long getNextOccurence() {
         return nextOccurence;
     }
 
-    public void setNextOccurence(Calendar nextOccurence) {
+    public void setNextOccurence(long nextOccurence) {
         this.nextOccurence = nextOccurence;
     }
     
     //METHODS
     
-    public Calendar calculateNextOccurence(){
-        Calendar nextOccurence = this.nextOccurence;
-        Frequency freq = this.freq;
+    public long calculateNextOccurence(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(this.nextOccurence);
         
         if (freq == Frequency.DAILY){
-            nextOccurence.add(Calendar.DATE,1);
+            calendar.add(Calendar.DATE,1);
         }
         if (freq == Frequency.WEEKLY){
-            nextOccurence.add(Calendar.DATE,7);
+            calendar.add(Calendar.DATE,7);
         }
         if (freq == Frequency.MONTHLY){
-            nextOccurence.add(Calendar.MONTH,1);
+            calendar.add(Calendar.MONTH,1);
         }
         if (freq == Frequency.YEARLY){
-            nextOccurence.add(Calendar.YEAR,1);
+            calendar.add(Calendar.YEAR,1);
         }
         return nextOccurence;
     }

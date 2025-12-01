@@ -15,19 +15,23 @@ import java.util.*;
 import java.util.function.Consumer;
 
 public class NonRecurrentTask extends Task {
-    private Calendar dueDate;
+    private long dueDate;
 
-
-    public NonRecurrentTask(String id, String title, String description, Category category, Status status, String userId, Priority priority, boolean enableNotif, LocalDateTime updatedAt, LocalDateTime createdAt, Calendar dueDate) {
+    public NonRecurrentTask(String id, String title, String description, Category category, Status status, String userId, Priority priority, boolean enableNotif, long updatedAt, long createdAt, long dueDate) {
         super(id, title, description, category, status, userId, priority, enableNotif, updatedAt, createdAt);
         this.dueDate = dueDate;
     }
 
-    public Calendar getDueDate() {
+    // If not added, Firebase will throw an error
+    public NonRecurrentTask() {
+        super();
+    }
+
+    public long getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(Calendar dueDate) {
+    public void setDueDate(long dueDate) {
         this.dueDate = dueDate;
     }
 
