@@ -3,6 +3,7 @@ package model;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,9 +80,15 @@ public class TaskAdapter extends BaseAdapter {
         // Set category color bubble background
         String colorString = task.getCategory().getHex();  // Assuming "FF0000" (without #)
 
-        GradientDrawable bg = (GradientDrawable) holder.imColor.getBackground();
-        bg.setColor(Color.parseColor(colorString));
-
+        try {
+            String cleaned = colorString.replace("#", ""); // Remove accidental #
+            GradientDrawable bg = (GradientDrawable) holder.imColor.getBackground();
+            bg.setColor(Color.parseColor("#" + cleaned));
+        } catch (Exception e) {
+            Log.e("COLOR_ERROR", "Invalid color: " + colorString);
+            GradientDrawable bg = (GradientDrawable) holder.imColor.getBackground();
+            bg.setColor(Color.GRAY); // fallback so app doesn't crash
+        }
         return convertView;
     }
 }
