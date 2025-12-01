@@ -95,14 +95,21 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
 
         //search in array all tasks said date and add it into a separate list
         for (Task item : taskList) {
-
-            if (item instanceof NonRecurrentTask && calDate == ((NonRecurrentTask) item).getDueDate()) {
-                currentDateTasks.add(item);
-            }
-            else if (item instanceof RecurrentTask && calDate == ((RecurrentTask) item).getStartCalendar()) {
-                currentDateTasks.add(item);
+            long selectedDateMillis = calDate.getTimeInMillis();
+            if (item instanceof NonRecurrentTask) {
+                NonRecurrentTask nt = (NonRecurrentTask) item;
+                if (selectedDateMillis == nt.getDueDate()) {
+                    currentDateTasks.add(nt);
+                }
+            } else if (item instanceof RecurrentTask) {
+                RecurrentTask rt = (RecurrentTask) item;
+                if (selectedDateMillis == rt.getStartCalendar()) {
+                    currentDateTasks.add(rt);
+                }
             }
         }
+        // Notify changes internally
+        taskAdapter.notifyDataSetChanged();
     }
 
 @Override

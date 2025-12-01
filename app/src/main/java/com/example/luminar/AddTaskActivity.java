@@ -237,10 +237,7 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
             }
 
             // Timestamp
-            LocalDateTime now = null;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                now = LocalDateTime.now();
-            }
+            long now = System.currentTimeMillis();
 
             // Default values
             Status status = Status.TODO;
@@ -258,17 +255,26 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
                     return;
                 }
 
+                // Convert calendar to long
+                long startTimeMillis = startTimeCalendar.getTimeInMillis();
+                long endTimeMillis = endTimeCalendar.getTimeInMillis();
+                long goalDateMillis = goalDateCalendar.getTimeInMillis();
+
                 RecurrentTask task = new RecurrentTask(
-                        taskId, name, notes, selectedCategory, status, userId, priority, enableNotif, now, now, selectedFrequency, (Calendar) startTimeCalendar.clone(), (Calendar) endTimeCalendar.clone(), (Calendar) goalDateCalendar.clone()
+                        taskId, name, notes, selectedCategory, status, userId, priority, enableNotif, now, now, selectedFrequency,
+                        startTimeMillis, endTimeMillis, goalDateMillis
                 );
 
                 task.save(task);
                 Snackbar.make(v, "Recurrent task '" + name + "' created successfully", Snackbar.LENGTH_LONG).show();
                 finish();
             } else {
+                // Convert Calendar to Long
+                long dueDateMillis = goalDateCalendar.getTimeInMillis();
+
                 // Non-recurring tasks
                 NonRecurrentTask task = new NonRecurrentTask(
-                        taskId, name, notes, selectedCategory, status, userId, priority, enableNotif, now, now, (Calendar) goalDateCalendar.clone()
+                        taskId, name, notes, selectedCategory, status, userId, priority, enableNotif, now, now, dueDateMillis
                 );
 
                 task.save(task);

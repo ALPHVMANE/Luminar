@@ -10,6 +10,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import model.DateConverter;
 import model.NonRecurrentTask;
 import model.RecurrentTask;
 
@@ -64,8 +65,8 @@ public class BottomSheetActivity extends AppCompatActivity {
 //                txtPriority.setText(task.getPriority().toString());
 
                 txtFreq.setText(task.getFreq().toString());
-                txtStart.setText(task.getStartCalendar().toString());
-                txtNext.setText(task.getNextOccurence().toString());
+                txtStart.setText(DateConverter.convertMillisToFormattedDate(task.getStartCalendar()));
+                txtNext.setText(DateConverter.convertMillisToFormattedDate(task.getNextOccurence()));
             });
 
         } else {
@@ -85,7 +86,7 @@ public class BottomSheetActivity extends AppCompatActivity {
                 txtStatus.setText(task.getStatus().toString());
 //                txtPriority.setText(task.getPriority().toString());
 
-                txtDueDate.setText(task.getDueDate().toString());
+                txtDueDate.setText(DateConverter.convertMillisToFormattedDate(task.getDueDate()));
             });
         }
     }
