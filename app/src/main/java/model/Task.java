@@ -1,20 +1,21 @@
 package model;
 
+import java.io.Serializable;
 import java.time.*;
 
-public abstract class Task {
+public abstract class Task implements Serializable {
     private String id;
     private String title;
     private String description;
     private Category category;
     private Status status;
     private String userId;
-    private LocalDateTime updatedAt;
-    private LocalDateTime createdAt;
+    private long updatedAt;
+    private long createdAt;
     private Priority priority;
     private boolean enableNotif;
 
-    public Task(String id, String title, String description, Category category, Status status, String userId, Priority priority, boolean enableNotif, LocalDateTime updatedAt, LocalDateTime createdAt) {
+    public Task(String id, String title, String description, Category category, Status status, String userId, Priority priority, boolean enableNotif, long updatedAt, long createdAt) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -24,6 +25,10 @@ public abstract class Task {
         this.priority = priority;
         this.updatedAt = updatedAt;
         this.createdAt = createdAt;
+    }
+
+    public Task() {
+
     }
 
     public String getId() {
@@ -69,19 +74,19 @@ public abstract class Task {
         this.userId = user;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public long getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
+    public void setUpdatedAt(long updatedAt) {
         this.updatedAt = updatedAt;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public long getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(long createdAt) {
         this.createdAt = createdAt;
     }
 
