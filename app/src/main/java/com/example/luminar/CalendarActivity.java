@@ -23,19 +23,21 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import model.*;
 import services.NavigationHelper;
 
-public class CalendarActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener, CalendarView.OnDateChangeListener, ValueEventListener {
+public class CalendarActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener, CalendarView.OnDateChangeListener {
     CalendarView calendar;
     TextView calendarDate;
     ListView lvTasks;
-    HashMap<String, String> taskIds;
     ArrayList<Task> currentDateTasks;
     TaskAdapter taskAdapter;
     private boolean isRecurring = false;
+
+    private long selectedDateMillis;
     DatabaseReference nTasksDB = FirebaseDatabase.getInstance().getReference("tasks");
     DatabaseReference rTasksDB = FirebaseDatabase.getInstance().getReference("recurringTasks");
 
@@ -55,24 +57,51 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
         calendar = findViewById(R.id.calendarView);
         calendarDate = findViewById(R.id.calendarDate);
         lvTasks = findViewById(R.id.listTasks);
-        lvTasks.setOnItemClickListener(this);
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setSelectedItemId(R.id.nav_calendar);
         NavigationHelper.setupBottomNavigation(this, bottomNav, R.id.nav_calendar);
-
-        taskIds = new HashMap<>();
-        nTasksDB.child(Global.getUid()).addValueEventListener(this);
-        isRecurring = true;
-        rTasksDB.child(Global.getUid()).addValueEventListener(this);
-
         currentDateTasks = new ArrayList<>();
         calendar.setOnDateChangeListener(this);
 
+        lvTasks.setOnItemClickListener(this);
         taskAdapter = new TaskAdapter(this, currentDateTasks);
         lvTasks.setAdapter(taskAdapter);
         taskAdapter.notifyDataSetChanged();
     }
+
+    private void loadNonRecurrent(DataSnapshot snapshot) {
+        long dayStart = selectedDateMillis;
+        long dayEnd = selectedDateMillis + (24 * 60 * 60 * 1000) - 1;
+
+        for (DataSnapshot ds : snapshot.getChildren()) {
+            NonRecurrentTask nt = ds.getValue(NonRecurrentTask.class);
+
+            if (nt != null && nt.getDueDate() >= dayStart && nt.getDueDate() <= dayEnd) {
+                nt.setId(ds.getKey());
+                currentDateTasks.add(nt);
+            }
+        }
+
+        taskAdapter.notifyDataSetChanged();
+    }
+
+    private void loadRecurrent(DataSnapshot snapshot) {
+        long dayStart = selectedDateMillis;
+        long dayEnd = selectedDateMillis + (24 * 60 * 60 * 1000) - 1;
+
+        for (DataSnapshot ds : snapshot.getChildren()) {
+            RecurrentTask rt = ds.getValue(RecurrentTask.class);
+
+            if (rt != null && rt.getStartCalendar() >= dayStart && rt.getStartCalendar() <= dayEnd) {
+                rt.setId(ds.getKey());
+                currentDateTasks.add(rt);
+            }
+        }
+
+        taskAdapter.notifyDataSetChanged();
+    }
+
 
     //to learn more: https://stackoverflow.com/questions/32867968/how-to-get-item-from-listview-onitemclick-in-android
     @Override
@@ -90,92 +119,43 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
     }
     @Override
     public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-
         Calendar cal = Calendar.getInstance();
         cal.set(year, month, dayOfMonth, 0, 0, 0);
         cal.set(Calendar.MILLISECOND, 0);
+        selectedDateMillis = cal.getTimeInMillis();
 
-        //search in array all tasks said date and add it into a separate list
-        for (Task item : taskList) {
-            long selectedDateMillis = calDate.getTimeInMillis();
-            if (item instanceof NonRecurrentTask) {
-                NonRecurrentTask nt = (NonRecurrentTask) item;
-                if (selectedDateMillis == nt.getDueDate()) {
-                    currentDateTasks.add(nt);
-                }
-            } else if (item instanceof RecurrentTask) {
-                RecurrentTask rt = (RecurrentTask) item;
-                if (selectedDateMillis == rt.getStartCalendar()) {
-                    currentDateTasks.add(rt);
-                }
-            }
-        }
-        // Notify changes internally
-        taskAdapter.notifyDataSetChanged();
-    }
+        currentDateTasks.clear();
 
-        long endOfDay = cal.getTimeInMillis();
+        // Remove previous listeners to avoid duplication
+        nTasksDB.child(Global.getUid()).removeEventListener(nonRecurrentListener);
+        rTasksDB.child(Global.getUid()).removeEventListener(recurrentListener);
 
-        getTasksForDay(startOfDay, endOfDay);
+        // Add fresh listeners
+        nTasksDB.child(Global.getUid()).addValueEventListener(nonRecurrentListener);
+        rTasksDB.child(Global.getUid()).addValueEventListener(recurrentListener);
 
 
     }
 
-    private void getTasksForDay(long start, long end) {
-
-    }
-
-    @Override
-    public void onDataChange(@NonNull DataSnapshot snapshot) {
-//        if (snapshot.exists()){
-//            if (!isRecurring){
-//                for (DataSnapshot taskSnapshot : snapshot.getChildren()) {
-//
-//                    NonRecurrentTask ntask = taskSnapshot.getValue(NonRecurrentTask.class);
-//
-//                    if (ntask != null) {
-//                        ntask.setId(taskSnapshot.getKey());
-//                    }
-//                    taskList.add(ntask);
-//                }
-//
-//                System.out.println(taskList);
-//            }
-//            else{
-//                for (DataSnapshot taskSnapshot : snapshot.getChildren()) {
-//
-//                    RecurrentTask rtask = taskSnapshot.getValue(RecurrentTask.class);
-//
-//                    if (rtask != null) {
-//                        rtask.setId(taskSnapshot.getKey());
-//                    }
-//                    taskList.add(rtask);
-//                }
-//
-//                System.out.println(taskList);
-//            }
-//        }else{
-//            Toast.makeText(this, "0 tasks", Toast.LENGTH_LONG).show();
-//        }
-        if (snapshot.exists()){
-            for (DataSnapshot ds : snapshot.getChildren()) {
-                taskIds.put(ds.getKey(), "NonRecurrent");
-            }
-        }
-        else{
-            Toast.makeText(CalendarActivity.this,
-                    "0 tasks",
-                    Toast.LENGTH_LONG).show();
+    private final ValueEventListener nonRecurrentListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            loadNonRecurrent(snapshot);
         }
 
-        Log.d("TASK_IDS", taskIds.toString());
-    }
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) { }
+    };
 
-    @Override
-    public void onCancelled(@NonNull DatabaseError error) {
-        System.out.println("Error: " + error.getMessage());
-        //Toast.makeText(this, "Error: ", Toast.LENGTH_LONG).show();
-    }
+    private final ValueEventListener recurrentListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            loadRecurrent(snapshot);
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) { }
+    };
 
     @Override
     public void onClick(View v) {

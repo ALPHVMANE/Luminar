@@ -10,83 +10,78 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
-
 import com.example.luminar.R;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
 public class TaskAdapter extends BaseAdapter {
-    private Context context;
-    private ArrayList<Task> taskList;
 
-    Task task;
+    private final Context context;
+    private final ArrayList<Task> taskList;
+    private final LayoutInflater inflater;
 
     public TaskAdapter(Context context, ArrayList<Task> taskList) {
         this.context = context;
         this.taskList = taskList;
+        this.inflater = LayoutInflater.from(context);
     }
 
-    // Implement the methods of BaseAdapter class
+    // ViewHolder Pattern (important)
+    private static class ViewHolder {
+        TextView tvTitle;
+        TextView tvStatus;
+        TextView tvCategory;
+        ImageView imColor;
+    }
 
-    // getCount : total number of items that should be displayed in the listview
     @Override
     public int getCount() {
         return taskList.size();
     }
 
-    // getItem : the item that should be in position : position in the listview
     @Override
-    public Object getItem(int position) {
+    public Task getItem(int position) {   // Return Task instead of Object
         return taskList.get(position);
     }
 
-    // getItemId : get item index in the position : position
     @Override
     public long getItemId(int position) {
         return position;
     }
 
-    // getView : the view that should be displayed in the position : position
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        // 1 - Declaration
-        // In this method you need to display the task (photo, full name, team name)
-        // We return a view that represent the task
+        ViewHolder holder;
 
-        View oneItem;
-        ImageView imColor;
-        TextView tvTitle, tvStat, tvCat;
+        // Reuse convertView if possible
+        if (convertView == null) {
+            convertView = inflater.inflate(R.layout.task_item, parent, false);
 
-        // These widgets are stored/located in one_item.xml
-        // ==> We need to do an operation that consist to convert this xml file (one_item.xml) to a java view object
-        // This conversion is called : Layout inflation
+            holder = new ViewHolder();
+            holder.tvTitle = convertView.findViewById(R.id.tvTitle);
+            holder.tvStatus = convertView.findViewById(R.id.tvStatus);
+            holder.tvCategory = convertView.findViewById(R.id.tvCategory);
+            holder.imColor = convertView.findViewById(R.id.colorCategory);
 
-        // 2 - Layout inflation
-        LayoutInflater inflater = LayoutInflater.from(context);
-        oneItem = inflater.inflate(R.layout.task_item,parent,false);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
 
-        // 3 - Reference each widget in single view
-        tvTitle = oneItem.findViewById(R.id.tvTitle);
-        tvStat = oneItem.findViewById(R.id.tvStatus);
-        tvCat = oneItem.findViewById(R.id.tvCategory);
-        imColor = oneItem.findViewById(R.id.colorCategory);
+        Task task = getItem(position);
 
-        // 4 - Manipulate (Populate) the widgets
-        task = (Task)getItem(position);
-        tvTitle.setText(task.getTitle());
-        tvStat.setText(task.getStatus().name());
-        String colorString = task.getCategory().getHex();
+        // Populate data
+        holder.tvTitle.setText(task.getTitle());
+        holder.tvStatus.setText(task.getStatus().name());
+        holder.tvCategory.setText(task.getCategory().getName());
 
+        // Set category color bubble background
+        String colorString = task.getCategory().getHex();  // Assuming "FF0000" (without #)
 
-//        //get category color
-//        GradientDrawable drawable = (GradientDrawable) imColor.getDrawable();
-//        int color = Color.parseColor("#" + colorString);
-//        drawable.setColor(color);
+        GradientDrawable bg = (GradientDrawable) holder.imColor.getBackground();
+        bg.setColor(Color.parseColor(colorString));
 
-        // 5 - Return the view oneItem
-        return oneItem;
+        return convertView;
     }
 }
