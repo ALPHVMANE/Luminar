@@ -81,10 +81,10 @@ public class TaskAdapter extends BaseAdapter {
         String colorString = task.getCategory().getHex();
 
 
-        //get category color
-        GradientDrawable drawable = (GradientDrawable) imColor.getDrawable();
-        int color = Color.parseColor("#" + colorString);
-        drawable.setColor(color);
+//        //get category color
+//        GradientDrawable drawable = (GradientDrawable) imColor.getDrawable();
+//        int color = Color.parseColor("#" + colorString);
+//        drawable.setColor(color);
 
         // 5 - Return the view oneItem
         return oneItem;
