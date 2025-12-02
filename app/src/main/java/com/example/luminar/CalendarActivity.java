@@ -90,7 +90,8 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
         for (DataSnapshot ds : snapshot.getChildren()) {
             RecurrentTask rt = ds.getValue(RecurrentTask.class);
 
-            if (rt != null && rt.getStartCalendar() >= dayStart && rt.getStartCalendar() <= dayEnd) {
+            // Changed from rt.getStartCalendar() to rt.getNextOccurence()
+            if (rt != null && rt.getNextOccurence() >= dayStart && rt.getNextOccurence() <= dayEnd) {
                 rt.setId(ds.getKey());
                 currentDateTasks.add(rt);
             }
