@@ -300,11 +300,17 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
                                      long now, Frequency freq, long startTimeMillis, long endTimeMillis, long goalDateMillis) {
         Calendar currentDate = Calendar.getInstance();
         currentDate.setTimeInMillis(now);
+        // Reset to start of day
+        currentDate.set(Calendar.HOUR_OF_DAY, 0);
+        currentDate.set(Calendar.MINUTE, 0);
+        currentDate.set(Calendar.SECOND, 0);
+        currentDate.set(Calendar.MILLISECOND, 0);
+
         Calendar endDate = Calendar.getInstance();
         endDate.setTimeInMillis(goalDateMillis);
         int tasksCreated = 0;
 
-        // Create tasks until end date
+        // Create tasks until end date (INCLUSIVE)
         while (currentDate.getTimeInMillis() <= endDate.getTimeInMillis()) {
             String taskId = UUID.randomUUID().toString();
             Calendar instanceDueDate = (Calendar) currentDate.clone();
@@ -316,17 +322,29 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
             instanceDueDate.set(Calendar.MILLISECOND, 0);
             long instanceDueDateMillis = instanceDueDate.getTimeInMillis();
 
-            // Set the task
+            // Create start time for this specific instance
+            Calendar instanceStartTime = (Calendar) instanceDueDate.clone();
+            instanceStartTime.set(Calendar.HOUR_OF_DAY, startTimeCalendar.get(Calendar.HOUR_OF_DAY));
+            instanceStartTime.set(Calendar.MINUTE, startTimeCalendar.get(Calendar.MINUTE));
+            long instanceStartTimeMillis = instanceStartTime.getTimeInMillis();
+
+            // Create end time for this specific instance
+            Calendar instanceEndTime = (Calendar) instanceDueDate.clone();
+            instanceEndTime.set(Calendar.HOUR_OF_DAY, endTimeCalendar.get(Calendar.HOUR_OF_DAY));
+            instanceEndTime.set(Calendar.MINUTE, endTimeCalendar.get(Calendar.MINUTE));
+            long instanceEndTimeMillis = instanceEndTime.getTimeInMillis();
+
+            // Set the task with instance-specific times
             RecurrentTask task = new RecurrentTask(
                     taskId, name, notes, category, status, userId, priority, enableNotif,
-                    now, now, freq, startTimeMillis, endTimeMillis, instanceDueDateMillis
+                    now, now, freq, instanceStartTimeMillis, instanceEndTimeMillis, instanceDueDateMillis
             );
 
             // Save + Create task
             task.save(task);
 
             if(enableNotif){
-                scheduleRecurrentNotification(taskId, name, notes, startTimeMillis);
+                scheduleRecurrentNotification(taskId, name, notes, instanceDueDateMillis);
             }
 
             tasksCreated++;
@@ -368,7 +386,6 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
         endTimeCalendar = Calendar.getInstance();
     }
 
-
     private void scheduleNonRecurrentNotification(String taskId, String name, String notes, long time){
         //Calculate 1 day before the due date
         long oneDayBefore = time - (24 * 60 * 60 * 1000);
@@ -383,7 +400,7 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
                     notificationMessage,
                     oneDayBefore
             );
-            saveNotification(taskId, name, notes, oneDayBefore);
+            saveNotification(taskId, name, notificationMessage, oneDayBefore);
             Log.d("AddTaskActivity", "Scheduled notification for non-recurrent task: " + name +
                     " at " + new java.util.Date(oneDayBefore));
         }else{
@@ -403,7 +420,7 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
                     thirtyMinBefore
             );
 
-            saveNotification(taskId, name, notes, thirtyMinBefore);
+            saveNotification(taskId, name, notificationMessage, thirtyMinBefore);
             Log.d("AddTaskActivity", "Scheduled notification for recurrent task: " + name +
                     " at " + new java.util.Date(thirtyMinBefore));
         }else{
@@ -416,14 +433,16 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
         String userId = Global.getUid();
 
         Notification notification = new Notification(
-            true,
-            taskId,
-            userId,
-            notes,
-            name,
-            time
+                notificationId,  // Include the ID as first parameter
+                true,
+                taskId,
+                userId,
+                notes,
+                name,
+                time
         );
+
         notification.save(notification);
-        Log.d("AddTaskActivity", "Notifications saved to Firebase: " + notificationId);
+        Log.d("AddTaskActivity", "Notification saved to Firebase: " + notificationId);
     }
 }

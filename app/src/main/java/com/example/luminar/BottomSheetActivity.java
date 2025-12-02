@@ -100,7 +100,6 @@ public class BottomSheetActivity extends BottomSheetDialogFragment {
                 txtTitle.setText(task.getTitle());
                 txtDescription.setText(task.getDescription());
                 txtCategory.setText(task.getCategory().toString());
-                txtStatus.setText(task.getStatus().toString());
                 txtDueDate.setText(DateConverter.convertMillisToFormattedDate(task.getDueDate()));
             });
         }

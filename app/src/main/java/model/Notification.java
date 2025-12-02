@@ -29,6 +29,10 @@ public class Notification {
         return id;
     }
 
+    // ADD THIS SETTER
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
@@ -78,7 +82,18 @@ public class Notification {
         Date = date;
     }
 
+    // Constructor with ID
+    public Notification(String id, boolean newNotification, String taskID, String userID, String message, String title, Long date) {
+        this.id = id;
+        this.newNotification = newNotification;
+        TaskID = taskID;
+        UserID = userID;
+        this.message = message;
+        this.title = title;
+        this.Date = date;
+    }
 
+    // Constructor without ID (for creating new notifications)
     public Notification(boolean newNotification, String taskID, String userID, String message, String title, Long date) {
         this.newNotification = newNotification;
         TaskID = taskID;
@@ -100,12 +115,34 @@ public class Notification {
                 .addOnFailureListener(e -> Log.e("Firebase", "Unable to delete notification :" + e.getMessage()));
     }
 
-    //save
+    //save - UPDATED to handle null ID
     public void save(Notification notification){
+        Log.d("notification", "=== SAVE METHOD CALLED ===");
+        Log.d("notification", "Notification ID: " + notification.getId());
+        Log.d("notification", "User ID: " + Global.getUid());
+
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("notifications");
-        ref.child(Global.getUid()).child(notification.getId()).setValue(notification)
-                .addOnSuccessListener(aVoid -> Log.d("Firebase", "Notification was successfully saved to the database"))
-                .addOnFailureListener(e -> Log.e("Firebase", "Unable to save notification : " + e.getMessage()));
+
+        // If ID is null, generate one
+        if (notification.getId() == null || notification.getId().isEmpty()) {
+            String newId = ref.child(Global.getUid()).push().getKey();
+            notification.setId(newId);
+            Log.d("notification", "Generated new ID: " + newId);
+        }
+
+        String userId = Global.getUid();
+        String notifId = notification.getId();
+
+        Log.d("Notification", "Saving to path: notifications/" + userId + "/" + notifId);
+
+        ref.child(userId).child(notifId).setValue(notification)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("Firebase", "✓ Notification was successfully saved to the database with ID: " + notification.getId());
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firebase", "✗ Unable to save notification : " + e.getMessage());
+                    e.printStackTrace();
+                });
     }
 
     //load
@@ -125,6 +162,7 @@ public class Notification {
             }
         });
     }
+
     public String getFormattedDate(){
         return new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date(Date));
     }
