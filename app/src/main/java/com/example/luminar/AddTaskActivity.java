@@ -398,7 +398,7 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
 
     private void scheduleNonRecurrentNotification(String taskId, String name, String notes, long time){
         //Calculate 1 day before the due date
-        long oneDayBefore = time - (9*60*60*1000);
+        long oneDayBefore = time - (12*60*60*1000);
 
         //Only schedule if notification time is in the future
         if(oneDayBefore > System.currentTimeMillis()){
