@@ -1,5 +1,4 @@
 # Luminar
-[![Ask DeepWiki](https://devin.ai/assets/askdeepwiki.png)](https://deepwiki.com/ALPHVMANE/Luminar)
 
 Luminar is a native Android application designed to help users manage their daily tasks and build consistent habits. It features a calendar-centric interface for organizing both singular and recurring tasks, complete with categories and custom reminders to keep users on track. The application utilizes Firebase for its backend services, including user authentication and data storage.
 
