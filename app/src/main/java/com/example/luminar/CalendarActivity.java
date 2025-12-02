@@ -49,7 +49,33 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
             return insets;
         });
         initialize();
+
+        // Auto-load current date and tasks
+        Calendar cal = Calendar.getInstance();
+        selectedDateMillis = cal.getTimeInMillis();
+        loadTasksForSelectedDate();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Refresh tasks
+        loadTasksForSelectedDate();
+    }
+
+    private void loadTasksForSelectedDate() {
+        currentDateTasks.clear();
+        taskAdapter.notifyDataSetChanged();
+
+        // Remove old listeners
+        nTasksDB.child(Global.getUid()).removeEventListener(nonRecurrentListener);
+        rTasksDB.child(Global.getUid()).removeEventListener(recurrentListener);
+
+        // Add fresh listeners
+        nTasksDB.child(Global.getUid()).addValueEventListener(nonRecurrentListener);
+        rTasksDB.child(Global.getUid()).addValueEventListener(recurrentListener);
+    }
+
     private void initialize() {
         calendar = findViewById(R.id.calendarView);
         calendarDate = findViewById(R.id.calendarDate);
@@ -64,7 +90,6 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
         lvTasks.setOnItemClickListener(this);
         taskAdapter = new TaskAdapter(this, currentDateTasks);
         lvTasks.setAdapter(taskAdapter);
-        taskAdapter.notifyDataSetChanged();
     }
 
     private void loadNonRecurrent(DataSnapshot snapshot) {
@@ -108,6 +133,18 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
         Task clickedTask = (Task) parent.getItemAtPosition(position);
         BottomSheetActivity sheet = BottomSheetActivity.newInstance(clickedTask.getId(), clickedTask instanceof RecurrentTask); //if Recurrent ? true : false
 
+        sheet.setOnTaskChangeListener(new BottomSheetActivity.OnTaskChangeListener() {
+            @Override
+            public void onTaskUpdated() {
+                loadTasksForSelectedDate();
+            }
+
+            @Override
+            public void onTaskDeleted() {
+                loadTasksForSelectedDate();
+            }
+        });
+
         sheet.show(getSupportFragmentManager(), "TaskDetails");
     }
     @Override
@@ -119,37 +156,34 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
         cal.set(Calendar.MILLISECOND, 0);
         selectedDateMillis = cal.getTimeInMillis();
 
-        currentDateTasks.clear();
-
-        // Remove previous listeners to avoid duplication
-        nTasksDB.child(Global.getUid()).removeEventListener(nonRecurrentListener);
-        rTasksDB.child(Global.getUid()).removeEventListener(recurrentListener);
-
-        // Add fresh listeners
-        nTasksDB.child(Global.getUid()).addValueEventListener(nonRecurrentListener);
-        rTasksDB.child(Global.getUid()).addValueEventListener(recurrentListener);
-
+        loadTasksForSelectedDate();
 
     }
 
     private final ValueEventListener nonRecurrentListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
+            currentDateTasks.removeIf(task -> task instanceof NonRecurrentTask);
             loadNonRecurrent(snapshot);
         }
 
         @Override
-        public void onCancelled(@NonNull DatabaseError error) { }
+        public void onCancelled(@NonNull DatabaseError error) {
+            Log.e("Firebase", "Error loading non-recurring tasks: " + error.getMessage());
+        }
     };
 
     private final ValueEventListener recurrentListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
+            currentDateTasks.removeIf(task -> task instanceof RecurrentTask);
             loadRecurrent(snapshot);
         }
 
         @Override
-        public void onCancelled(@NonNull DatabaseError error) { }
+        public void onCancelled(@NonNull DatabaseError error) {
+            Log.e("Firebase", "Error loading recurring tasks: " + error.getMessage());
+        }
     };
 
     @Override
