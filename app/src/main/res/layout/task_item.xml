@@ -3,7 +3,8 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="15dp"
-    android:background="@drawable/task_bg">
+    android:layout_margin="15dp"
+    android:background="@drawable/circle_shape">
 
     <ImageView
         android:id="@+id/colorCategory"
@@ -47,7 +48,7 @@
             android:layout_height="wrap_content"
             android:text="Category"
             android:textSize="20sp"
-            android:textColor="#FFFFFF" />
+            android:textColor="#673AB7" />
 
     </LinearLayout>
 

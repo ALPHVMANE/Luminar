@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:theme="@style/CustomCalendarView">
 
 
     <!-- Calendar -->
@@ -46,19 +47,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="350dp"
-            app:layout_constraintHeight_percent="0.5">
+        android:layout_weight="0.9">
 
             <ListView
                 android:id="@+id/listTasks"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"/>
 
-        </FrameLayout>
     </LinearLayout>
 
     <include

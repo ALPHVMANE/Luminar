@@ -3,5 +3,6 @@
 <!--        <item name="android:statusBarColor">@color/luminar_bg</item>-->
 <!--        <item name="android:navigationBarColor">@color/luminar_bg</item>-->
 <!--        <item name="android:windowBackground">@color/luminar_bg</item>-->
+
     </style>
 </resources>
