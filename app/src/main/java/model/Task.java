@@ -25,6 +25,7 @@ public abstract class Task implements Serializable {
         this.priority = priority;
         this.updatedAt = updatedAt;
         this.createdAt = createdAt;
+        this.enableNotif = enableNotif;
     }
 
     public Task() {
@@ -45,6 +46,10 @@ public abstract class Task implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public String getDescription() {

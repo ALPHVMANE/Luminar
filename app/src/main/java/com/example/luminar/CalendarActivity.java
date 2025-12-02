@@ -50,34 +50,30 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
         });
         initialize();
 
-        // Check if we came from a notification
-        handleNotificationIntent();
+        // Auto-load current date and tasks
+        Calendar cal = Calendar.getInstance();
+        selectedDateMillis = cal.getTimeInMillis();
+        loadTasksForSelectedDate();
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        setIntent(intent);
-        handleNotificationIntent();
+    protected void onResume() {
+        super.onResume();
+        // Refresh tasks
+        loadTasksForSelectedDate();
     }
 
-    /**
-     * Handle intent from notification click
-     */
-    private void handleNotificationIntent() {
-        Intent intent = getIntent();
-        if (intent != null && intent.getBooleanExtra("openBottomSheet", false)) {
-            String taskId = intent.getStringExtra("taskId");
-            boolean isRecurring = intent.getBooleanExtra("isRecurring", false);
+    private void loadTasksForSelectedDate() {
+        currentDateTasks.clear();
+        taskAdapter.notifyDataSetChanged();
 
-            if (taskId != null && !taskId.isEmpty()) {
-                // Open the bottom sheet after a short delay to ensure activity is ready
-                lvTasks.postDelayed(() -> {
-                    BottomSheetActivity sheet = BottomSheetActivity.newInstance(taskId, isRecurring);
-                    sheet.show(getSupportFragmentManager(), "TaskDetails");
-                }, 300);
-            }
-        }
+        // Remove old listeners
+        nTasksDB.child(Global.getUid()).removeEventListener(nonRecurrentListener);
+        rTasksDB.child(Global.getUid()).removeEventListener(recurrentListener);
+
+        // Add fresh listeners
+        nTasksDB.child(Global.getUid()).addValueEventListener(nonRecurrentListener);
+        rTasksDB.child(Global.getUid()).addValueEventListener(recurrentListener);
     }
 
     private void initialize() {
@@ -94,7 +90,6 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
         lvTasks.setOnItemClickListener(this);
         taskAdapter = new TaskAdapter(this, currentDateTasks);
         lvTasks.setAdapter(taskAdapter);
-        taskAdapter.notifyDataSetChanged();
     }
 
     private void loadNonRecurrent(DataSnapshot snapshot) {
@@ -120,7 +115,8 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
         for (DataSnapshot ds : snapshot.getChildren()) {
             RecurrentTask rt = ds.getValue(RecurrentTask.class);
 
-            if (rt != null && rt.getStartCalendar() >= dayStart && rt.getStartCalendar() <= dayEnd) {
+            // Changed from rt.getStartCalendar() to rt.getNextOccurence()
+            if (rt != null && rt.getNextOccurence() >= dayStart && rt.getNextOccurence() <= dayEnd) {
                 rt.setId(ds.getKey());
                 currentDateTasks.add(rt);
             }
@@ -137,9 +133,20 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
         Task clickedTask = (Task) parent.getItemAtPosition(position);
         BottomSheetActivity sheet = BottomSheetActivity.newInstance(clickedTask.getId(), clickedTask instanceof RecurrentTask); //if Recurrent ? true : false
 
+        sheet.setOnTaskChangeListener(new BottomSheetActivity.OnTaskChangeListener() {
+            @Override
+            public void onTaskUpdated() {
+                loadTasksForSelectedDate();
+            }
+
+            @Override
+            public void onTaskDeleted() {
+                loadTasksForSelectedDate();
+            }
+        });
+
         sheet.show(getSupportFragmentManager(), "TaskDetails");
     }
-
     @Override
     public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
         Calendar cal = Calendar.getInstance();
@@ -149,37 +156,34 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
         cal.set(Calendar.MILLISECOND, 0);
         selectedDateMillis = cal.getTimeInMillis();
 
-        currentDateTasks.clear();
-
-        // Remove previous listeners to avoid duplication
-        nTasksDB.child(Global.getUid()).removeEventListener(nonRecurrentListener);
-        rTasksDB.child(Global.getUid()).removeEventListener(recurrentListener);
-
-        // Add fresh listeners
-        nTasksDB.child(Global.getUid()).addValueEventListener(nonRecurrentListener);
-        rTasksDB.child(Global.getUid()).addValueEventListener(recurrentListener);
-
+        loadTasksForSelectedDate();
 
     }
 
     private final ValueEventListener nonRecurrentListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
+            currentDateTasks.removeIf(task -> task instanceof NonRecurrentTask);
             loadNonRecurrent(snapshot);
         }
 
         @Override
-        public void onCancelled(@NonNull DatabaseError error) { }
+        public void onCancelled(@NonNull DatabaseError error) {
+            Log.e("Firebase", "Error loading non-recurring tasks: " + error.getMessage());
+        }
     };
 
     private final ValueEventListener recurrentListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
+            currentDateTasks.removeIf(task -> task instanceof RecurrentTask);
             loadRecurrent(snapshot);
         }
 
         @Override
-        public void onCancelled(@NonNull DatabaseError error) { }
+        public void onCancelled(@NonNull DatabaseError error) {
+            Log.e("Firebase", "Error loading recurring tasks: " + error.getMessage());
+        }
     };
 
     @Override
