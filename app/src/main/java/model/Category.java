@@ -24,4 +24,8 @@ public class Category {
     public String getHex() {
         return hex;
     }
+
+    public void setId(int id) { this.id = id; }
+    public void setName(String name) { this.name = name; }
+    public void setHex(String hex) { this.hex = hex; }
 }
