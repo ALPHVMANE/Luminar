@@ -28,6 +28,7 @@ import java.util.List;
 
 import model.*;
 import services.NavigationHelper;
+import services.NotificationsPermissionHelper;
 
 public class CalendarActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, CalendarView.OnDateChangeListener {
     CalendarView calendar;
@@ -42,6 +43,8 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // In onCreate() or appropriate location
+        NotificationsPermissionHelper.requestNotificationPermission(this);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_calendar);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -159,4 +162,11 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
         @Override
         public void onCancelled(@NonNull DatabaseError error) { }
     };
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        NotificationsPermissionHelper.handlePermissionResult(requestCode, permissions, grantResults);
+    }
 }

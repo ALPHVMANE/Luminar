@@ -23,6 +23,7 @@ import java.util.UUID;
 
 import model.*;
 import services.NavigationHelper;
+import services.NotificationScheduler;
 
 public class AddTaskActivity extends AppCompatActivity implements View.OnClickListener {
     EditText edtName, edtNotes, edtGoalDate, edtStartTime, edtEndTime;
@@ -277,6 +278,11 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
                 );
 
                 task.save(task);
+
+                if(enableNotif){
+                    scheduleNonRecurrentNotification(taskId, name, notes, dueDateMillis);
+                }
+
                 Snackbar.make(v, "Task '" + name + "' created successfully", Snackbar.LENGTH_LONG).show();
                 finish();
             }
@@ -318,6 +324,11 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
 
             // Save + Create task
             task.save(task);
+
+            if(enableNotif){
+                scheduleRecurrentNotification(taskId, name, notes, startTimeMillis);
+            }
+
             tasksCreated++;
 
             // Move to next occurrence based on freq
@@ -358,4 +369,61 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
+    private void scheduleNonRecurrentNotification(String taskId, String name, String notes, long time){
+        //Calculate 1 day before the due date
+        long oneDayBefore = time - (24 * 60 * 60 * 1000);
+
+        //Only schedule if notification time is in the future
+        if(oneDayBefore > System.currentTimeMillis()){
+            String notificationMessage = "Your task '" + name.toLowerCase() + "' is due tomorrow at " + DateConverter.convertMillisToFormattedDate(time) + ".";
+            NotificationScheduler.scheduleTaskReminder(
+                    this,
+                    taskId,
+                    name,
+                    notificationMessage,
+                    oneDayBefore
+            );
+            saveNotification(taskId, name, notes, oneDayBefore);
+            Log.d("AddTaskActivity", "Scheduled notification for non-recurrent task: " + name +
+                    " at " + new java.util.Date(oneDayBefore));
+        }else{
+            Log.d("AddTaskActivity", "Cannot schedule notification for non-recurrent task: " + name);
+        }
+    }
+
+    private void scheduleRecurrentNotification(String taskId, String name, String notes, long time) {
+        long thirtyMinBefore = time - (30 * 60 * 1000);
+        if(thirtyMinBefore > System.currentTimeMillis()) {
+            String notificationMessage = "Your task '" + name.toLowerCase() + "' is due in 30 minutes!";
+            NotificationScheduler.scheduleTaskReminder(
+                    this,
+                    taskId,
+                    name,
+                    notificationMessage,
+                    thirtyMinBefore
+            );
+
+            saveNotification(taskId, name, notes, thirtyMinBefore);
+            Log.d("AddTaskActivity", "Scheduled notification for recurrent task: " + name +
+                    " at " + new java.util.Date(thirtyMinBefore));
+        }else{
+            Log.d("AddTaskActivity", "Notification time is in the past for task: " + name);
+        }
+    }
+
+    private void saveNotification(String taskId, String name, String notes, long time) {
+        String notificationId = UUID.randomUUID().toString();
+        String userId = Global.getUid();
+
+        Notification notification = new Notification(
+            true,
+            taskId,
+            userId,
+            notes,
+            name,
+            time
+        );
+        notification.save(notification);
+        Log.d("AddTaskActivity", "Notifications saved to Firebase: " + notificationId);
+    }
 }
