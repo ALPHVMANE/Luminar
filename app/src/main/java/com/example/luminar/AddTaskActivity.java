@@ -119,6 +119,8 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
         // Checkboxes
         checkBoxRecurrent.setOnCheckedChangeListener((buttonView, isChecked) -> {
             spnFrequency.setEnabled(isChecked);
+            edtStartTime.setEnabled(isChecked);
+            edtEndTime.setEnabled(isChecked);
             if (!isChecked) {
                 spnFrequency.setSelection(0);
             }
@@ -271,7 +273,14 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
                 finish();
             } else {
                 // Convert Calendar to Long
-                long dueDateMillis = goalDateCalendar.getTimeInMillis();
+                // Convert Calendar to Long for due date (end of day: 23:59:59)
+                Calendar dueDateCal = (Calendar) goalDateCalendar.clone();
+                dueDateCal.set(Calendar.HOUR_OF_DAY, 23);
+                dueDateCal.set(Calendar.MINUTE, 59);
+                dueDateCal.set(Calendar.SECOND, 59);
+                dueDateCal.set(Calendar.MILLISECOND, 999);
+                long dueDateMillis = dueDateCal.getTimeInMillis();
+
 
                 // Non-recurring tasks
                 NonRecurrentTask task = new NonRecurrentTask(
@@ -389,7 +398,7 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
 
     private void scheduleNonRecurrentNotification(String taskId, String name, String notes, long time){
         //Calculate 1 day before the due date
-        long oneDayBefore = time - (5*60*1000);
+        long oneDayBefore = time - (9*60*60*1000);
 
         //Only schedule if notification time is in the future
         if(oneDayBefore > System.currentTimeMillis()){
