@@ -17,6 +17,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.UUID;
@@ -388,10 +389,11 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
 
     private void scheduleNonRecurrentNotification(String taskId, String name, String notes, long time){
         //Calculate 1 day before the due date
-        long oneDayBefore = time - (24 * 60 * 60 * 1000);
+        long oneDayBefore = time - (5*60*1000);
 
         //Only schedule if notification time is in the future
         if(oneDayBefore > System.currentTimeMillis()){
+            Log.d("AddTaskActivity", "Scheduling notification for non-recurrent task:");
             String notificationMessage = "Your task '" + name.toLowerCase() + "' is due tomorrow at " + DateConverter.convertMillisToFormattedDate(time) + ".";
             NotificationScheduler.scheduleTaskReminder(
                     this,

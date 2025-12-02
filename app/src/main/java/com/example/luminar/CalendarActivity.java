@@ -49,7 +49,37 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
             return insets;
         });
         initialize();
+
+        // Check if we came from a notification
+        handleNotificationIntent();
     }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handleNotificationIntent();
+    }
+
+    /**
+     * Handle intent from notification click
+     */
+    private void handleNotificationIntent() {
+        Intent intent = getIntent();
+        if (intent != null && intent.getBooleanExtra("openBottomSheet", false)) {
+            String taskId = intent.getStringExtra("taskId");
+            boolean isRecurring = intent.getBooleanExtra("isRecurring", false);
+
+            if (taskId != null && !taskId.isEmpty()) {
+                // Open the bottom sheet after a short delay to ensure activity is ready
+                lvTasks.postDelayed(() -> {
+                    BottomSheetActivity sheet = BottomSheetActivity.newInstance(taskId, isRecurring);
+                    sheet.show(getSupportFragmentManager(), "TaskDetails");
+                }, 300);
+            }
+        }
+    }
+
     private void initialize() {
         calendar = findViewById(R.id.calendarView);
         calendarDate = findViewById(R.id.calendarDate);
@@ -109,6 +139,7 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
 
         sheet.show(getSupportFragmentManager(), "TaskDetails");
     }
+
     @Override
     public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
         Calendar cal = Calendar.getInstance();
