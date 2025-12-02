@@ -106,7 +106,6 @@ public class BottomSheetActivity extends BottomSheetDialogFragment implements Vi
         edEnd.setOnClickListener(this);
 
         catDB = FirebaseDatabase.getInstance().getReference("categories");
-        //Nofitication dunno how to implement it
         notif = view.findViewById(R.id.toggleNotif);
         btnUpdate =  view.findViewById(R.id.btnUpdate);
         btnDel =  view.findViewById(R.id.btnDelete);
@@ -136,7 +135,8 @@ public class BottomSheetActivity extends BottomSheetDialogFragment implements Vi
                 // Set values
                 txtTitle.setText(task.getTitle());
                 edDesc.setText(task.getDescription());
-                txtCategory.setText(task.getCategory().getName());
+
+                notif.setChecked(task.isEnableNotif());
 
                     catDB.get().addOnSuccessListener(snapshot -> {
                         allCategories.clear();
@@ -177,8 +177,7 @@ public class BottomSheetActivity extends BottomSheetDialogFragment implements Vi
 
                 txtTitle.setText(task.getTitle());
                 edDesc.setText(task.getDescription());
-                txtCategory.setText(task.getCategory().getName());
-                txtStat.setText(task.getStatus().toString());
+                notif.setChecked(task.isEnableNotif());
 
                 catDB.get().addOnSuccessListener(snapshot -> {
                     allCategories.clear();
@@ -279,6 +278,7 @@ public class BottomSheetActivity extends BottomSheetDialogFragment implements Vi
                 }
 
                 // Update fields
+
                 String selectedStatus = spinStatus.getSelectedItem().toString();
                 task.setStatus(Status.valueOf(selectedStatus));
 
