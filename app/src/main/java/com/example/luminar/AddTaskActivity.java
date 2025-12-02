@@ -23,6 +23,7 @@ import java.util.UUID;
 
 import model.*;
 import services.NavigationHelper;
+import services.NotificationScheduler;
 
 public class AddTaskActivity extends AppCompatActivity implements View.OnClickListener {
     EditText edtName, edtNotes, edtGoalDate, edtStartTime, edtEndTime;
@@ -277,6 +278,11 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
                 );
 
                 task.save(task);
+
+                if(enableNotif){
+                    scheduleNonRecurrentNotification(taskId, name, notes, dueDateMillis);
+                }
+
                 Snackbar.make(v, "Task '" + name + "' created successfully", Snackbar.LENGTH_LONG).show();
                 finish();
             }
@@ -294,11 +300,17 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
                                      long now, Frequency freq, long startTimeMillis, long endTimeMillis, long goalDateMillis) {
         Calendar currentDate = Calendar.getInstance();
         currentDate.setTimeInMillis(now);
+        // Reset to start of day
+        currentDate.set(Calendar.HOUR_OF_DAY, 0);
+        currentDate.set(Calendar.MINUTE, 0);
+        currentDate.set(Calendar.SECOND, 0);
+        currentDate.set(Calendar.MILLISECOND, 0);
+
         Calendar endDate = Calendar.getInstance();
         endDate.setTimeInMillis(goalDateMillis);
         int tasksCreated = 0;
 
-        // Create tasks until end date
+        // Create tasks until end date (INCLUSIVE)
         while (currentDate.getTimeInMillis() <= endDate.getTimeInMillis()) {
             String taskId = UUID.randomUUID().toString();
             Calendar instanceDueDate = (Calendar) currentDate.clone();
@@ -310,14 +322,31 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
             instanceDueDate.set(Calendar.MILLISECOND, 0);
             long instanceDueDateMillis = instanceDueDate.getTimeInMillis();
 
-            // Set the task
+            // Create start time for this specific instance
+            Calendar instanceStartTime = (Calendar) instanceDueDate.clone();
+            instanceStartTime.set(Calendar.HOUR_OF_DAY, startTimeCalendar.get(Calendar.HOUR_OF_DAY));
+            instanceStartTime.set(Calendar.MINUTE, startTimeCalendar.get(Calendar.MINUTE));
+            long instanceStartTimeMillis = instanceStartTime.getTimeInMillis();
+
+            // Create end time for this specific instance
+            Calendar instanceEndTime = (Calendar) instanceDueDate.clone();
+            instanceEndTime.set(Calendar.HOUR_OF_DAY, endTimeCalendar.get(Calendar.HOUR_OF_DAY));
+            instanceEndTime.set(Calendar.MINUTE, endTimeCalendar.get(Calendar.MINUTE));
+            long instanceEndTimeMillis = instanceEndTime.getTimeInMillis();
+
+            // Set the task with instance-specific times
             RecurrentTask task = new RecurrentTask(
                     taskId, name, notes, category, status, userId, priority, enableNotif,
-                    now, now, freq, startTimeMillis, endTimeMillis, instanceDueDateMillis
+                    now, now, freq, instanceStartTimeMillis, instanceEndTimeMillis, instanceDueDateMillis
             );
 
             // Save + Create task
             task.save(task);
+
+            if(enableNotif){
+                scheduleRecurrentNotification(taskId, name, notes, instanceDueDateMillis);
+            }
+
             tasksCreated++;
 
             // Move to next occurrence based on freq
@@ -357,5 +386,63 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
         endTimeCalendar = Calendar.getInstance();
     }
 
+    private void scheduleNonRecurrentNotification(String taskId, String name, String notes, long time){
+        //Calculate 1 day before the due date
+        long oneDayBefore = time - (24 * 60 * 60 * 1000);
 
+        //Only schedule if notification time is in the future
+        if(oneDayBefore > System.currentTimeMillis()){
+            String notificationMessage = "Your task '" + name.toLowerCase() + "' is due tomorrow at " + DateConverter.convertMillisToFormattedDate(time) + ".";
+            NotificationScheduler.scheduleTaskReminder(
+                    this,
+                    taskId,
+                    name,
+                    notificationMessage,
+                    oneDayBefore
+            );
+            saveNotification(taskId, name, notificationMessage, oneDayBefore);
+            Log.d("AddTaskActivity", "Scheduled notification for non-recurrent task: " + name +
+                    " at " + new java.util.Date(oneDayBefore));
+        }else{
+            Log.d("AddTaskActivity", "Cannot schedule notification for non-recurrent task: " + name);
+        }
+    }
+
+    private void scheduleRecurrentNotification(String taskId, String name, String notes, long time) {
+        long thirtyMinBefore = time - (30 * 60 * 1000);
+        if(thirtyMinBefore > System.currentTimeMillis()) {
+            String notificationMessage = "Your task '" + name.toLowerCase() + "' is due in 30 minutes!";
+            NotificationScheduler.scheduleTaskReminder(
+                    this,
+                    taskId,
+                    name,
+                    notificationMessage,
+                    thirtyMinBefore
+            );
+
+            saveNotification(taskId, name, notificationMessage, thirtyMinBefore);
+            Log.d("AddTaskActivity", "Scheduled notification for recurrent task: " + name +
+                    " at " + new java.util.Date(thirtyMinBefore));
+        }else{
+            Log.d("AddTaskActivity", "Notification time is in the past for task: " + name);
+        }
+    }
+
+    private void saveNotification(String taskId, String name, String notes, long time) {
+        String notificationId = UUID.randomUUID().toString();
+        String userId = Global.getUid();
+
+        Notification notification = new Notification(
+                notificationId,  // Include the ID as first parameter
+                true,
+                taskId,
+                userId,
+                notes,
+                name,
+                time
+        );
+
+        notification.save(notification);
+        Log.d("AddTaskActivity", "Notification saved to Firebase: " + notificationId);
+    }
 }
