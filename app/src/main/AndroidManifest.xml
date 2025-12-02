@@ -33,9 +33,6 @@
             android:launchMode="singleTop"
             android:exported="false" />
         <activity
-            android:name=".BottomSheetActivity"
-            android:exported="false" />
-        <activity
             android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>

@@ -1,58 +1,77 @@
 package com.example.luminar;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import model.DateConverter;
 import model.NonRecurrentTask;
 import model.RecurrentTask;
 
-public class BottomSheetActivity extends AppCompatActivity {
-    TextView txtTitle, txtDescription, txtCategory, txtStatus, txtDueDate, txtFreq, txtStart, txtNext;
+public class BottomSheetActivity extends BottomSheetDialogFragment {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_bottom_sheet);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-        initialize();
+    TextView txtTitle, txtDescription, txtCategory, txtDueDate, txtFreq, txtStart, txtNext;
+
+    Spinner spinStatus;
+
+    Button btnDel, btnUpdate;
+
+    private String taskId;
+    private boolean isRecurring;
+
+    public static BottomSheetActivity newInstance(String taskId, boolean isRecurring) {
+        BottomSheetActivity sheet = new BottomSheetActivity();
+        Bundle args = new Bundle();
+        args.putString("taskId", taskId);
+        args.putBoolean("type", isRecurring);
+        sheet.setArguments(args);
+        return sheet;
     }
-    public void initialize(){
-        String taskId = getIntent().getStringExtra("taskId");
-        txtTitle = findViewById(R.id.tvTitle);
-        txtDescription = findViewById(R.id.txtDesc);
-        txtCategory = findViewById(R.id.txtCat);
-        txtStatus = findViewById(R.id.txtStat);
-//        txtPriority = findViewById(R.id.txtPrio);
 
-        txtDueDate = findViewById(R.id.txtDueDate);
+    @Nullable
+    @Override
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState
+    ) {
+        View view = inflater.inflate(R.layout.activity_bottom_sheet, container, false);
 
-        txtFreq = findViewById(R.id.txtFreq);
-        txtStart = findViewById(R.id.txtStartDate);
-        txtNext = findViewById(R.id.txtNextOcurrence);
+        if (getArguments() != null) {
+            taskId = getArguments().getString("taskId");
+            isRecurring = getArguments().getBoolean("type", false);
+        }
 
-        String id = getIntent().getStringExtra("taskId");
-        boolean isRecurring = getIntent().getBooleanExtra("type", false);
+        initialize(view);
 
+        return view;
+    }
+
+    public void initialize(View view) {
+
+        txtTitle = view.findViewById(R.id.tvTitle);
+        txtDescription = view.findViewById(R.id.txtDesc);
+        txtCategory = view.findViewById(R.id.txtCat);
+        spinStatus = view.findViewById(R.id.spinStat);
+        txtDueDate = view.findViewById(R.id.txtDueDate);
+        txtFreq = view.findViewById(R.id.txtFreq);
+        txtStart = view.findViewById(R.id.txtStartDate);
+        txtNext = view.findViewById(R.id.txtNextOcurrence);
 
         if (isRecurring) {
 
-            RecurrentTask.load(id, task -> {
-                if (task == null) {return;}
+            RecurrentTask.load(taskId, task -> {
+                if (task == null) return;
 
-                //Visibility
                 txtFreq.setVisibility(View.VISIBLE);
                 txtStart.setVisibility(View.VISIBLE);
                 txtNext.setVisibility(View.VISIBLE);
@@ -61,8 +80,7 @@ public class BottomSheetActivity extends AppCompatActivity {
                 txtTitle.setText(task.getTitle());
                 txtDescription.setText(task.getDescription());
                 txtCategory.setText(task.getCategory().toString());
-                txtStatus.setText(task.getStatus().toString());
-//                txtPriority.setText(task.getPriority().toString());
+                spinStatus.getSelectedItem();
 
                 txtFreq.setText(task.getFreq().toString());
                 txtStart.setText(DateConverter.convertMillisToFormattedDate(task.getStartCalendar()));
@@ -71,10 +89,9 @@ public class BottomSheetActivity extends AppCompatActivity {
 
         } else {
 
-            NonRecurrentTask.load(id, task -> {
-                if (task == null) {return;}
+            NonRecurrentTask.load(taskId, task -> {
+                if (task == null) return;
 
-                //Visibility
                 txtFreq.setVisibility(View.GONE);
                 txtStart.setVisibility(View.GONE);
                 txtNext.setVisibility(View.GONE);
@@ -84,8 +101,6 @@ public class BottomSheetActivity extends AppCompatActivity {
                 txtDescription.setText(task.getDescription());
                 txtCategory.setText(task.getCategory().toString());
                 txtStatus.setText(task.getStatus().toString());
-//                txtPriority.setText(task.getPriority().toString());
-
                 txtDueDate.setText(DateConverter.convertMillisToFormattedDate(task.getDueDate()));
             });
         }

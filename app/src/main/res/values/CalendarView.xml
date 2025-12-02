@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomCalendarView" parent="Theme.MaterialComponents.DayNight">
+        <!-- Selected day circle color -->
+        <item name="colorAccent">#673AB7</item> <!-- Purple -->
+        <item name="colorPrimary">#291B6A</item>
+        <item name="colorControlActivated">#673AB7</item>
+    </style>
+</resources>
