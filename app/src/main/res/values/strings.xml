@@ -33,4 +33,6 @@
     <string name="pick_color">Pick color</string>
     <string name="reminder">Reminder</string>
     <string name="frequency">Frequency</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

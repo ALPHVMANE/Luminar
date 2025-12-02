@@ -3,7 +3,6 @@ package com.example.luminar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
 
@@ -15,7 +14,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,18 +22,18 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import model.*;
 import services.NavigationHelper;
-import services.NotificationsPermissionHelper;
 
-public class CalendarActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, CalendarView.OnDateChangeListener {
+public class CalendarActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener, CalendarView.OnDateChangeListener {
     CalendarView calendar;
     TextView calendarDate;
     ListView lvTasks;
     ArrayList<Task> currentDateTasks;
     TaskAdapter taskAdapter;
+    private boolean isRecurring = false;
+
     private long selectedDateMillis;
     DatabaseReference nTasksDB = FirebaseDatabase.getInstance().getReference("tasks");
     DatabaseReference rTasksDB = FirebaseDatabase.getInstance().getReference("recurringTasks");
@@ -43,8 +41,6 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // In onCreate() or appropriate location
-        NotificationsPermissionHelper.requestNotificationPermission(this);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_calendar);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -62,7 +58,6 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setSelectedItemId(R.id.nav_calendar);
         NavigationHelper.setupBottomNavigation(this, bottomNav, R.id.nav_calendar);
-//        BottomSheetDialog btmSheet = new BottomSheetDialog(BottomSheetActivity.class);
         currentDateTasks = new ArrayList<>();
         calendar.setOnDateChangeListener(this);
 
@@ -110,23 +105,16 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
         Task clickedTask = (Task) parent.getItemAtPosition(position);
-        Intent intent = new Intent(this, BottomSheetActivity.class);
-        if (clickedTask instanceof NonRecurrentTask) {
-            intent.putExtra("type", false);
-        } else if (clickedTask instanceof RecurrentTask) {
-            intent.putExtra("type", true);
-        }
-        intent.putExtra("taskId", clickedTask.getId());
-        startActivity(intent);
+        BottomSheetActivity sheet = BottomSheetActivity.newInstance(clickedTask.getId(), clickedTask instanceof RecurrentTask); //if Recurrent ? true : false
+
+        sheet.show(getSupportFragmentManager(), "TaskDetails");
     }
     @Override
     public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-
-        String date = dayOfMonth + "/" + (month + 1) + "/" + year;
-        calendarDate.setText(date);
-
         Calendar cal = Calendar.getInstance();
         cal.set(year, month, dayOfMonth, 0, 0, 0);
+        String displayDate = dayOfMonth + "/" + (month + 1) + "/" + year;
+        calendarDate.setText(displayDate);
         cal.set(Calendar.MILLISECOND, 0);
         selectedDateMillis = cal.getTimeInMillis();
 
@@ -163,10 +151,9 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
         public void onCancelled(@NonNull DatabaseError error) { }
     };
 
-
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        NotificationsPermissionHelper.handlePermissionResult(requestCode, permissions, grantResults);
+    public void onClick(View v) {
+        Intent intent = new Intent(this, AddTaskActivity.class);
+        startActivity(intent);
     }
 }
