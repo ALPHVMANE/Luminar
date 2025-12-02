@@ -68,8 +68,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         // If Firebase Auth session exists, skip login
         if (mAuth.getCurrentUser() != null) {
             Global.setUid(mAuth.getCurrentUser().getUid());
-            goToMain();
+
+            // Check if we should open notifications
+            Intent intent = getIntent();
+            if (intent != null && intent.getBooleanExtra("openNotifications", false)) {
+                goToNotifications();
+            } else {
+                goToMain();
+            }
         }
+    }
+
+
+    private void goToNotifications() {
+        startActivity(new Intent(LoginActivity.this, NotificationActivity.class));
+        finish();
     }
 
     private void goToMain() {
