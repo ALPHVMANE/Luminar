@@ -131,7 +131,7 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
         Task clickedTask = (Task) parent.getItemAtPosition(position);
-        BottomSheetActivity sheet = BottomSheetActivity.newInstance(clickedTask.getId(), clickedTask instanceof RecurrentTask); //if Recurrent ? true : false
+        BottomSheetActivity sheet = BottomSheetActivity.newInstance(clickedTask.getId(), clickedTask instanceof RecurrentTask); //Recurrent ? true : false
 
         sheet.setOnTaskChangeListener(new BottomSheetActivity.OnTaskChangeListener() {
             @Override
