@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
     <ImageView
-        android:layout_width="70dp"
         android:id="@+id/btnReturn"
+        android:layout_width="70dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center|top"
         android:scaleType="centerCrop"
         android:src="@drawable/rm_sheet" />
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,9 +32,7 @@
             android:textAlignment="viewStart"
             android:textColor="#000000"
             android:textSize="25dp" />
-
     </LinearLayout>
-
 
     <ScrollView
         android:layout_width="match_parent"
@@ -81,15 +78,11 @@
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/txtCat"
+                <Spinner
+                    android:id="@+id/spinCat"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingBottom="10dp"
-                    android:text="_______"
-                    android:textSize="13sp" />
-
+                    android:layout_weight="1" />
             </LinearLayout>
 
             <LinearLayout
@@ -112,38 +105,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
-
-
-
             </LinearLayout>
-
-            <!--        <LinearLayout-->
-            <!--            android:layout_width="match_parent"-->
-            <!--            android:layout_height="wrap_content"-->
-            <!--            android:orientation="horizontal">-->
-
-            <!--            <TextView-->
-            <!--                android:id="@+id/tvPriority"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_weight="1"-->
-            <!--                android:paddingBottom="16dp"-->
-            <!--                android:text="Priority"-->
-            <!--                android:textSize="16sp"-->
-            <!--                android:textStyle="bold" />-->
-
-            <!--            <TextView-->
-            <!--                android:id="@+id/txtPrio"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_weight="1"-->
-            <!--                android:paddingBottom="10dp"-->
-            <!--                android:text="_______"-->
-            <!--                android:textSize="13sp" />-->
-
-            <!--        </LinearLayout>-->
-
-            <!-- =============== SINGLE TASK FIELD =============== -->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -161,18 +123,18 @@
                     android:textStyle="bold"
                     android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/txtDueDate"
-                    android:layout_width="match_parent"
+                <EditText
+                    android:id="@+id/edDueDate"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingBottom="10dp"
-                    android:text="_______"
-                    android:textSize="13sp"
+                    android:ems="10"
+                    android:inputType="date"
+                    android:text="Date"
                     android:visibility="gone" />
-
             </LinearLayout>
-            <!-- ============= DIVIDER FOR RECURRING ============= -->
+
+            <!-- Divider-->
             <View
                 android:id="@+id/divRecurring"
                 android:layout_width="match_parent"
@@ -182,8 +144,6 @@
                 android:paddingBottom="10dp"
                 android:visibility="gone" />
 
-
-            <!-- =============== RECURRING TASK FIELDS =============== -->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -201,16 +161,12 @@
                     android:textStyle="bold"
                     android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/txtFreq"
+                <Spinner
+                    android:id="@+id/spinFreq"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingBottom="10dp"
-                    android:text="_______"
-                    android:textSize="13sp"
                     android:visibility="gone" />
-
             </LinearLayout>
 
             <LinearLayout
@@ -224,21 +180,20 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingBottom="16dp"
-                    android:text="Date"
+                    android:text="Start Date"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/txtStartDate"
-                    android:layout_width="match_parent"
+                <EditText
+                    android:id="@+id/edStartDate"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingBottom="10dp"
-                    android:text="_______"
-                    android:textSize="13sp"
+                    android:layout_weight="0"
+                    android:ems="10"
+                    android:inputType="date"
+                    android:text="_____"
                     android:visibility="gone" />
-
             </LinearLayout>
 
             <LinearLayout
@@ -247,26 +202,25 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tvNextOccurrence"
+                    android:id="@+id/tvEndDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingBottom="12dp"
-                    android:text="Next Date"
+                    android:paddingBottom="16dp"
+                    android:text="End Date"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/txtNextOcurrence"
-                    android:layout_width="match_parent"
+                <EditText
+                    android:id="@+id/edEndDate"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingBottom="10dp"
-                    android:text="_______"
-                    android:textSize="13sp"
+                    android:layout_weight="0"
+                    android:ems="10"
+                    android:inputType="date"
+                    android:text="_____"
                     android:visibility="gone" />
-
             </LinearLayout>
 
             <LinearLayout
@@ -279,34 +233,32 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Notifications"
-                    android:padding="10dp"/>
-
+                    android:padding="10dp" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_gravity="center"
                 android:gravity="center">
+
                 <Button
                     android:id="@+id/btnUpdate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Update"
-                    android:layout_margin="10dp"
-                    />
+                    android:layout_margin="10dp" />
+
                 <Button
                     android:id="@+id/btnDelete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Delete"
-                    android:layout_margin="10dp"
-                    />
+                    android:layout_margin="10dp" />
             </LinearLayout>
 
         </LinearLayout>
-
     </ScrollView>
-
 
 </LinearLayout>
