@@ -32,8 +32,8 @@ public class BottomSheetActivity extends BottomSheetDialogFragment implements Vi
         void onTaskDeleted();
     }
 
-    TextView txtTitle, txtDescription, txtStat, txtCategory, txtDueDate, txtFreq, txtStart, txtNext, txtEnd;
-    EditText edDueDate, edStart, edEnd;
+    TextView txtTitle, txtStat, txtCategory, txtDueDate, txtFreq, txtStart, txtEnd;
+    EditText edDueDate, edStart, edEnd, edDesc;
     Spinner spinStatus, spinFreq, spinCat;
     Button btnDel, btnUpdate;
 
@@ -82,7 +82,7 @@ public class BottomSheetActivity extends BottomSheetDialogFragment implements Vi
 
         // UI Elements
         txtTitle = view.findViewById(R.id.tvTitle);
-        txtDescription = view.findViewById(R.id.txtDesc);
+        edDesc = view.findViewById(R.id.txtDesc);
 
         txtCategory = view.findViewById(R.id.tvCategory);
         spinCat = view.findViewById(R.id.spinCat);
@@ -135,7 +135,7 @@ public class BottomSheetActivity extends BottomSheetDialogFragment implements Vi
 
                 // Set values
                 txtTitle.setText(task.getTitle());
-                txtDescription.setText(task.getDescription());
+                edDesc.setText(task.getDescription());
                 txtCategory.setText(task.getCategory().getName());
 
                     catDB.get().addOnSuccessListener(snapshot -> {
@@ -176,7 +176,7 @@ public class BottomSheetActivity extends BottomSheetDialogFragment implements Vi
                 edDueDate.setVisibility(View.VISIBLE);
 
                 txtTitle.setText(task.getTitle());
-                txtDescription.setText(task.getDescription());
+                edDesc.setText(task.getDescription());
                 txtCategory.setText(task.getCategory().getName());
                 txtStat.setText(task.getStatus().toString());
 
