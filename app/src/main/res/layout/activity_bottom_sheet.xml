@@ -128,8 +128,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:ems="10"
                     android:inputType="date"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:clickable="true"
+                    android:cursorVisible="false"
+                    android:longClickable="false"
+                    android:ems="10"
                     android:text="Date"
                     android:visibility="gone" />
             </LinearLayout>
@@ -190,9 +195,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:ems="10"
                     android:inputType="date"
-                    android:text="_____"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:clickable="true"
+                    android:cursorVisible="false"
+                    android:longClickable="false"
+                    android:ems="10"
+                    android:text="Date"
                     android:visibility="gone" />
             </LinearLayout>
 
@@ -217,8 +227,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
-                    android:ems="10"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:clickable="true"
+                    android:cursorVisible="false"
                     android:inputType="date"
+                    android:longClickable="false"
+                    android:ems="10"
                     android:text="_____"
                     android:visibility="gone" />
             </LinearLayout>
