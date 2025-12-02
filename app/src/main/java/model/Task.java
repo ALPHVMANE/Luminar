@@ -25,7 +25,7 @@ public abstract class Task implements Serializable {
         this.priority = priority;
         this.updatedAt = updatedAt;
         this.createdAt = createdAt;
-        this.enableNotif = enableNotif;
+        this.enableNotif = true;
     }
 
     public Task() {
