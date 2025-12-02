@@ -54,7 +54,56 @@ public class CalendarActivity extends AppCompatActivity implements AdapterView.O
         Calendar cal = Calendar.getInstance();
         selectedDateMillis = cal.getTimeInMillis();
         loadTasksForSelectedDate();
+        checkForTaskFromNotification();
     }
+
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        checkForTaskFromNotification();
+    }
+
+
+
+    private void checkForTaskFromNotification() {
+        Intent intent = getIntent();
+        if (intent != null && intent.getBooleanExtra("openBottomSheet", false)) {
+            String taskId = intent.getStringExtra("taskId");
+            boolean isRecurring = intent.getBooleanExtra("isRecurring", false);
+
+            if (taskId != null) {
+                // Post with delay to ensure tasks are loaded first
+                new android.os.Handler().postDelayed(() -> {
+                    openTaskBottomSheet(taskId, isRecurring);
+                }, 500);
+
+                // Clear the extras so it doesn't reopen on orientation change
+                intent.removeExtra("openBottomSheet");
+            }
+        }
+    }
+
+    private void openTaskBottomSheet(String taskId, boolean isRecurring) {
+        BottomSheetActivity sheet = BottomSheetActivity.newInstance(taskId, isRecurring);
+
+        sheet.setOnTaskChangeListener(new BottomSheetActivity.OnTaskChangeListener() {
+            @Override
+            public void onTaskUpdated() {
+                loadTasksForSelectedDate();
+            }
+
+            @Override
+            public void onTaskDeleted() {
+                loadTasksForSelectedDate();
+            }
+        });
+
+        sheet.show(getSupportFragmentManager(), "TaskDetails");
+    }
+
+
 
     @Override
     protected void onResume() {
