@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Brand Palette -->
+    <color name="tropic_wave">#0096A5</color>
+    <color name="sky_blue">#4EBBD5</color>
+    <color name="tide_mint">#9BCCB0</color>
+    <color name="shell_cream">#E5DED6</color>
+    <color name="soft_seafoam">#B6DBE5</color>
+    <color name="sand_beige">#D7B4D2</color>
+    <color name="selector">#00515a</color>
+
+    <!-- Neutral -->
+    <color name="white">#FFFFFF</color>
+    <color name="text_primary">#003840</color>
+    <color name="text_secondary">#557982</color>
 </resources>
