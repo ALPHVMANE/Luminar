@@ -6,21 +6,17 @@
     android:padding="16dp"
     android:layout_marginHorizontal="16dp"
     android:layout_marginVertical="10dp"
-    android:background="@drawable/task_container"
     android:minHeight="72dp"
-    android:elevation="6dp"
-    android:clipToOutline="true">
+    android:elevation="6dp">
 
     <!-- Category Color Icon -->
     <ImageView
         android:id="@+id/colorCategory"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:background="@drawable/circle_btn"
         android:layout_marginEnd="16dp"
-        android:elevation="8dp"
-        android:translationZ="8dp"
-        android:clipToOutline="true"/>
+        android:layout_marginTop="15dp" />
 
     <!-- Text Content -->
     <LinearLayout
