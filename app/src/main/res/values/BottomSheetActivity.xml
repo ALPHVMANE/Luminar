@@ -5,6 +5,6 @@
         <item name="behavior_fitToContents">true</item>
         <item name="cornerSize">10dp</item>
         <item name="cornerFamily">rounded</item>
-        <item name="strokeColor">#44445D</item>
+        <item name="android:windowBackground">@drawable/bg_gradient</item>
     </style>
 </resources>
