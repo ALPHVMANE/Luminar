@@ -53,6 +53,6 @@ The project is organized into several key packages:
 ## Contributors
 
 - **Derrick Mangari:** Designed the Firebase Realtime Database schema, created the data models, and implemented Firebase Cloud Messaging.
-- **Melinda Tran:** Designed the model structure, front-end and backend display of Calendar page.
-- **Justin Pescador:** Implemented create,delete, and update tasks features.
+- **Melinda Tran:** Designed the model structure, front-end and backend of the calendar.
+- **Justin Pescador:** Implemented create,delete, and update tasks features of the calendar.
 - **Byron Baron:** Designed the logo and front-end of Luminar. 
